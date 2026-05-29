@@ -34,7 +34,8 @@ export function InstagramDrawer() {
             {snapshot.crecimientoSemanal !== null && (
               <div className="inline-flex items-center gap-2 mt-3 bg-[#FEF2F1] rounded-full px-4 py-1.5">
                 <span className="text-[#E63B2E] text-[14px] font-extrabold">
-                  ↑ +{snapshot.crecimientoSemanal}
+                  {snapshot.crecimientoSemanal >= 0 ? '↑' : '↓'}{' '}
+                  {snapshot.crecimientoSemanal >= 0 ? '+' : ''}{snapshot.crecimientoSemanal}
                 </span>
                 <span className="text-[12px] text-[#bbb]">esta semana</span>
               </div>

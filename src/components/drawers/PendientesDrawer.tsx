@@ -24,7 +24,8 @@ export function PendientesDrawer() {
   const pendientesFiltrados = pendientes.filter(p => {
     if (filtro === 'TODOS') return true
     if (filtro === 'SEMANA') return p.estaSemana
-    return !p.completado // HOY muestra solo incompletos
+    // HOY: sin campo de fecha en el schema, muestra los pendientes aún no completados
+    return !p.completado
   })
 
   async function agregarNuevo() {

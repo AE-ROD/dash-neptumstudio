@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { usePanelContext } from '@/context/PanelContext'
 
@@ -14,7 +15,7 @@ export function DrawerBase({ estaAbierto, titulo, children }: DrawerBaseProps) {
   return (
     <AnimatePresence>
       {estaAbierto && (
-        <>
+        <React.Fragment key="drawer-contenido">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -54,7 +55,7 @@ export function DrawerBase({ estaAbierto, titulo, children }: DrawerBaseProps) {
               {children}
             </div>
           </motion.aside>
-        </>
+        </React.Fragment>
       )}
     </AnimatePresence>
   )

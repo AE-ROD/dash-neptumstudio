@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { usePanelContext } from '@/context/PanelContext'
 import { useProyectos } from '@/hooks/useProyectos'
 import { DrawerBase } from './DrawerBase'
@@ -15,12 +15,17 @@ export function ProyectoDrawer() {
   const proyecto = proyectos.find(p => p.id === idSeleccionado)
   const estaAbierto = drawerAbierto === 'proyecto'
 
+  // Limpiar nota al cambiar de proyecto
+  useEffect(() => { setNuevaNota('') }, [idSeleccionado])
+
   async function guardarNota() {
     if (!proyecto || !nuevaNota.trim()) return
     setGuardando(true)
     try {
       await actualizarProyecto(proyecto.id, { ultimaNota: nuevaNota })
       setNuevaNota('')
+    } catch {
+      // Error visible: el botón regresa a "Guardar nota →"; la nota no se borra
     } finally {
       setGuardando(false)
     }

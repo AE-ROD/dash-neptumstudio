@@ -9,6 +9,7 @@ export function useInstagram() {
   useEffect(() => {
     fetch('/api/instagram')
       .then(r => r.ok ? r.json() : null)
+      .catch(() => null)
       .then(setSnapshot)
       .finally(() => setCargando(false))
   }, [])
