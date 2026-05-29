@@ -12,6 +12,7 @@
   --font-body:    var(--font-dm-sans), sans-serif;
 }
 
+/* Full-screen locked dashboard — scroll happens inside inner containers */
 body {
   background: var(--bg);
   font-family: var(--font-body);
