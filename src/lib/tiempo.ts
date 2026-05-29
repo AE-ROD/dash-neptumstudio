@@ -26,3 +26,7 @@ export const COLORES_PILL: Record<TemaTiempo, { texto: string; activo: string; a
   tarde:  { texto: '#0C4A6E', activo: '#0369A1',  activoTexto: '#FFFFFF' },
   noche:  { texto: '#94A3B8', activo: '#F8FAFC',  activoTexto: '#0F172A' },
 }
+
+export function getTemaTiempoActual(): TemaTiempo {
+  return getTemaTiempo(new Date().getHours())
+}

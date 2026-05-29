@@ -1,6 +1,6 @@
-export type ProjectEstado  = 'ACTIVO' | 'PAUSADO' | 'COMPLETADO' | 'ARCHIVADO'
-export type ProposalEstado = 'LEAD' | 'PROPUESTA' | 'ACTIVO' | 'CERRADO'
-export type IdeaEtiqueta   = 'IDEA' | 'MEJORA' | 'OPORTUNIDAD' | 'TAREA'
+export type { ProjectEstado, ProposalEstado, IdeaEtiqueta, ClientTipo, IdeaEstado } from '@/app/generated/prisma/client'
+
+import type { ProjectEstado, ProposalEstado, IdeaEtiqueta, IdeaEstado } from '@/app/generated/prisma/client'
 
 export interface Proyecto {
   id: string
@@ -23,6 +23,20 @@ export interface Propuesta {
   estado: ProposalEstado
   ultimoContacto: string | null
   notas: string | null
+  proyectoId: string | null
+}
+
+export interface Idea {
+  id: string
+  texto: string
+  fuente: string
+  etiqueta: IdeaEtiqueta
+  estado: IdeaEstado
+  desarrollo: string | null
+  proximoPensamiento: string | null
+  proyectoId: string | null
+  creadoEn: string
+  actualizadoEn: string
 }
 
 export interface Pendiente {
