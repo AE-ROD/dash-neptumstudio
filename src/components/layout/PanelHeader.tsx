@@ -6,13 +6,15 @@ import { usePanelContext } from '@/context/PanelContext'
 import type { SeccionActiva } from '@/context/PanelContext'
 
 const PILLS_NAV: { id: SeccionActiva; etiqueta: string; tieneActividad: boolean }[] = [
-  { id: 'inicio',      etiqueta: 'Inicio',      tieneActividad: false },
-  { id: 'proyectos',   etiqueta: 'Proyectos',   tieneActividad: true  },
-  { id: 'clientes',    etiqueta: 'Clientes',    tieneActividad: false },
-  { id: 'pipeline',    etiqueta: 'Pipeline',    tieneActividad: true  },
-  { id: 'ingresos',    etiqueta: 'Ingresos',    tieneActividad: false },
-  { id: 'pendientes',  etiqueta: 'Pendientes',  tieneActividad: false },
-  { id: 'instagram',   etiqueta: 'Instagram',   tieneActividad: false },
+  { id: 'inicio',        etiqueta: 'Inicio',        tieneActividad: false },
+  { id: 'proyectos',     etiqueta: 'Proyectos',     tieneActividad: false },
+  { id: 'clientes',      etiqueta: 'Clientes',      tieneActividad: false },
+  { id: 'pipeline',      etiqueta: 'Pipeline',      tieneActividad: false },
+  { id: 'cotizaciones',  etiqueta: 'Cotizaciones',  tieneActividad: false },
+  { id: 'contacto',      etiqueta: 'Contacto',      tieneActividad: false },
+  { id: 'ingresos',      etiqueta: 'Ingresos',      tieneActividad: false },
+  { id: 'pendientes',    etiqueta: 'Pendientes',    tieneActividad: false },
+  { id: 'instagram',     etiqueta: 'Instagram',     tieneActividad: false },
 ]
 
 export function PanelHeader() {

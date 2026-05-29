@@ -49,15 +49,33 @@ model Proposal {
 }
 
 model Client {
-  id            String     @id @default(cuid())
+  id            String       @id @default(cuid())
   nombre        String
-  tipo          ClientTipo @default(PERSONA)
+  marca         String?
+  tipo          ClientTipo   @default(PERSONA)
   email         String?
   telefono      String?
   ciudad        String?
   propuestas    Proposal[]
-  creadoEn      DateTime   @default(now())
-  actualizadoEn DateTime   @updatedAt
+  cotizaciones  Cotizacion[]
+  creadoEn      DateTime     @default(now())
+  actualizadoEn DateTime     @updatedAt
+}
+
+model Cotizacion {
+  id            String           @id @default(cuid())
+  clienteId     String?
+  cliente       Client?          @relation(fields: [clienteId], references: [id])
+  nombreCliente String
+  estado        CotizacionEstado @default(BORRADOR)
+  items         Json             @default("[]")
+  total         Float            @default(0)
+  notas         String?
+  creadoEn      DateTime         @default(now())
+  actualizadoEn DateTime         @updatedAt
+
+  @@index([estado])
+  @@index([clienteId])
 }
 
 model Pending {
@@ -136,6 +154,13 @@ enum ProposalEstado {
 enum ClientTipo {
   PERSONA
   EMPRESA
+}
+
+enum CotizacionEstado {
+  BORRADOR
+  ENVIADA
+  APROBADA
+  RECHAZADA
 }
 
 enum IdeaEtiqueta {

@@ -13,22 +13,27 @@ import { PendientesWidget }         from '@/components/widgets/PendientesWidget'
 import { InstagramWidget }          from '@/components/widgets/InstagramWidget'
 import { SueltaloWidget }           from '@/components/widgets/SueltaloWidget'
 import { IdeasWidget }              from '@/components/widgets/IdeasWidget'
+import { ContactosWidget }          from '@/components/widgets/ContactosWidget'
+import { CotizacionesWidget }       from '@/components/widgets/CotizacionesWidget'
 import { ProyectoDrawer }           from '@/components/drawers/ProyectoDrawer'
 import { PendientesDrawer }         from '@/components/drawers/PendientesDrawer'
 import { InstagramDrawer }          from '@/components/drawers/InstagramDrawer'
 import { PropuestaModal }           from '@/components/modals/PropuestaModal'
 import { IdeaModal }                from '@/components/modals/IdeaModal'
+import { CotizacionModal }          from '@/components/modals/CotizacionModal'
 
 // Qué filas se muestran según la sección activa
-type FilaPagina = 'stats' | 'listas' | 'dia'
+type FilaPagina = 'stats' | 'listas' | 'dia' | 'contacto' | 'cotizaciones'
 const FILAS_POR_SECCION: Record<SeccionActiva, FilaPagina[]> = {
-  inicio:     ['stats', 'listas', 'dia'],
-  ingresos:   ['stats'],
-  proyectos:  ['stats', 'listas'],
-  clientes:   ['stats', 'listas'],
-  pipeline:   ['stats', 'listas'],
-  pendientes: ['stats', 'listas', 'dia'],
-  instagram:  ['stats', 'listas', 'dia'],
+  inicio:       ['stats', 'listas', 'dia'],
+  ingresos:     ['stats'],
+  proyectos:    ['stats', 'listas'],
+  clientes:     ['stats', 'listas'],
+  pipeline:     ['stats', 'listas'],
+  cotizaciones: ['cotizaciones'],
+  contacto:     ['contacto'],
+  pendientes:   ['stats', 'listas', 'dia'],
+  instagram:    ['stats', 'listas', 'dia'],
 }
 
 const fade = {
@@ -88,6 +93,18 @@ export default function PaginaPanel() {
             </motion.div>
           )}
 
+          {filas.includes('cotizaciones') && (
+            <motion.div key="cotizaciones" {...fade}>
+              <CotizacionesWidget />
+            </motion.div>
+          )}
+
+          {filas.includes('contacto') && (
+            <motion.div key="contacto" {...fade}>
+              <ContactosWidget />
+            </motion.div>
+          )}
+
         </AnimatePresence>
       </main>
 
@@ -97,6 +114,7 @@ export default function PaginaPanel() {
       <InstagramDrawer />
       <PropuestaModal />
       <IdeaModal />
+      <CotizacionModal />
     </div>
   )
 }

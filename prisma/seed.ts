@@ -5,7 +5,8 @@ import { PrismaClient } from '../src/app/generated/prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  // Limpiar datos existentes antes de sembrar
+  // Limpiar todo
+  await prisma.cotizacion.deleteMany()
   await prisma.revenue.deleteMany()
   await prisma.instagramSnapshot.deleteMany()
   await prisma.pending.deleteMany()
@@ -15,72 +16,17 @@ async function main() {
   await prisma.client.deleteMany()
   await prisma.project.deleteMany()
 
-  await prisma.project.createMany({
-    data: [
-      {
-        nombre: 'Eli',
-        descripcion: 'SaaS de reservas multi-tenant para negocios de salud.',
-        stack: ['Next.js 16', 'Prisma', 'PostgreSQL', 'NextAuth.js', 'Tailwind'],
-        estado: 'ACTIVO',
-        progreso: 65,
-        repoUrl: 'https://github.com/AE-ROD/Eli',
-        rutaLocal: '/Users/alejandrorodriguez/Desktop/Eli',
-        proximoPaso: 'Integración frontend ↔ backend',
-        ultimaNota: 'El locking pesimista resolvió el race condition.',
-      },
-      {
-        nombre: 'iPro',
-        descripcion: 'Template odontológico SaaS con odontograma interactivo.',
-        stack: ['React', 'Vite', 'Bootstrap'],
-        estado: 'ACTIVO',
-        progreso: 42,
-        proximoPaso: 'Módulo de facturación',
-      },
-      {
-        nombre: 'Klin · Anelis',
-        descripcion: 'Agente WhatsApp con dashboard para clínica dental.',
-        stack: ['Express.js', 'SQLite', 'Baileys', 'Groq'],
-        estado: 'ACTIVO',
-        progreso: 100,
-        proximoPaso: 'Comando /stats semanal',
-        ultimaNota: 'Latencia bajó de 4s a 1.8s tras mover el prompt a módulo.',
-      },
-      {
-        nombre: 'M-Fit',
-        descripcion: 'App de fitness en vanilla JS puro.',
-        stack: ['Vanilla JS'],
-        estado: 'PAUSADO',
-        progreso: 30,
-      },
-    ],
-  })
-
-  await prisma.proposal.createMany({
-    data: [
-      { nombreCliente: 'Cliente A', descripcion: 'Sitio web corporativo + branding', monto: 1200, estado: 'PROPUESTA' },
-      { nombreCliente: 'Cliente B', descripcion: 'App móvil React Native', monto: 3500, estado: 'LEAD' },
-      { nombreCliente: 'Cliente C', descripcion: 'Dashboard de gestión web', monto: 2200, estado: 'ACTIVO' },
-    ],
-  })
-
-  await prisma.pending.createMany({
-    data: [
-      { texto: 'Enviar propuesta a Lucas M.' },
-      { texto: 'Llamar a Clínica Norte' },
-      { texto: 'Publicar en Instagram hoy' },
-      { texto: 'Review PR Eli — locking', completado: true },
-    ],
-  })
-
+  // Instagram real: 3 seguidores, cuenta nueva
   await prisma.instagramSnapshot.create({
     data: { seguidores: 3, publicaciones: 0, alcancePromedio: 0, crecimientoSemanal: 0 },
   })
 
+  // Ingresos en 0 para mayo 2026
   await prisma.revenue.create({
-    data: { monto: 4200, descripcion: 'Mayo 2026', mes: 5, anio: 2026 },
+    data: { monto: 0, descripcion: 'Mayo 2026', mes: 5, anio: 2026 },
   })
 
-  console.log('✅ Seed completado')
+  console.log('✅ Seed completado — datos reales, todo en cero excepto Instagram (3 seguidores)')
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect())
