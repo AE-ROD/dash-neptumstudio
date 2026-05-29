@@ -21,12 +21,15 @@ export function PropuestaModal() {
   const [notasLocal,  setNotasLocal]  = useState(propuesta?.notas ?? '')
   const [guardando,   setGuardando]   = useState(false)
 
+  // Sincronizar estado local solo cuando cambia el ID de la propuesta
+  const propuestaId = propuesta?.id
   useEffect(() => {
     if (propuesta) {
       setEstadoLocal(propuesta.estado)
       setNotasLocal(propuesta.notas ?? '')
     }
-  }, [propuesta])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propuestaId])
 
   async function guardarCambios() {
     if (!propuesta) return
