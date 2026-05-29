@@ -16,15 +16,20 @@ export function usePendientes() {
   useEffect(() => { cargar() }, [cargar])
 
   async function toggleCompletado(id: string, completado: boolean) {
+    const previo = pendientes
     // Optimistic update
-    setPendientes(prev =>
-      prev.map(p => p.id === id ? { ...p, completado } : p)
-    )
-    await fetch(`/api/pending/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ completado }),
-    })
+    setPendientes(prev => prev.map(p => p.id === id ? { ...p, completado } : p))
+    try {
+      const res = await fetch(`/api/pending/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ completado }),
+      })
+      if (!res.ok) throw new Error('Error al actualizar pendiente')
+    } catch {
+      // Rollback si falla
+      setPendientes(previo)
+    }
   }
 
   async function agregarPendiente(texto: string) {

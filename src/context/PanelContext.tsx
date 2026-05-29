@@ -1,8 +1,8 @@
 'use client'
 import { createContext, useContext, useState, ReactNode } from 'react'
 
-type TipoDrawer = 'proyecto' | 'pendientes' | 'instagram' | null
-type TipoModal  = 'propuesta' | 'cliente' | 'idea' | null
+export type TipoDrawer = 'proyecto' | 'pendientes' | 'instagram' | null
+export type TipoModal  = 'propuesta' | 'cliente' | 'idea' | null
 
 interface PanelContextValue {
   drawerAbierto: TipoDrawer

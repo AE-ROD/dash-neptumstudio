@@ -24,11 +24,12 @@ export function useProyectos() {
   useEffect(() => { cargar() }, [cargar])
 
   async function actualizarProyecto(id: string, cambios: Partial<Proyecto>) {
-    await fetch(`/api/projects/${id}`, {
+    const res = await fetch(`/api/projects/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cambios),
     })
+    if (!res.ok) throw new Error('Error al actualizar proyecto')
     await cargar()
   }
 
