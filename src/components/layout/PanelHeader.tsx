@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getTemaTiempo, getSaludo, GRADIENTES_HEADER, COLORES_PILL } from '@/lib/tiempo'
 import { usePanelContext } from '@/context/PanelContext'
+import type { SeccionActiva } from '@/context/PanelContext'
 
-const PILLS_NAV = [
+const PILLS_NAV: { id: SeccionActiva; etiqueta: string; tieneActividad: boolean }[] = [
   { id: 'inicio',      etiqueta: 'Inicio',      tieneActividad: false },
   { id: 'proyectos',   etiqueta: 'Proyectos',   tieneActividad: true  },
   { id: 'clientes',    etiqueta: 'Clientes',    tieneActividad: false },
@@ -12,53 +13,27 @@ const PILLS_NAV = [
   { id: 'ingresos',    etiqueta: 'Ingresos',    tieneActividad: false },
   { id: 'pendientes',  etiqueta: 'Pendientes',  tieneActividad: false },
   { id: 'instagram',   etiqueta: 'Instagram',   tieneActividad: false },
-] as const
-
-type PillId = typeof PILLS_NAV[number]['id']
-
-function scrollA(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
+]
 
 export function PanelHeader() {
-  const [horaActual,  setHoraActual]  = useState(new Date().getHours())
-  const [pillActiva,  setPillActiva]  = useState<PillId>('inicio')
-  const { abrirDrawer } = usePanelContext()
+  const [horaActual, setHoraActual] = useState(new Date().getHours())
+  const { seccionActiva, cambiarSeccion, abrirDrawer } = usePanelContext()
 
   useEffect(() => {
-    const intervalo = setInterval(() => {
-      setHoraActual(new Date().getHours())
-    }, 60_000)
+    const intervalo = setInterval(() => setHoraActual(new Date().getHours()), 60_000)
     return () => clearInterval(intervalo)
   }, [])
-
-  function manejarPill(id: PillId) {
-    setPillActiva(id)
-    switch (id) {
-      case 'inicio':
-        document.getElementById('panel-main')?.scrollTo({ top: 0, behavior: 'smooth' })
-        break
-      case 'ingresos':
-        scrollA('seccion-stats')
-        break
-      case 'proyectos':
-      case 'clientes':
-      case 'pipeline':
-        scrollA('seccion-proyectos')
-        break
-      case 'pendientes':
-        abrirDrawer('pendientes')
-        break
-      case 'instagram':
-        abrirDrawer('instagram')
-        break
-    }
-  }
 
   const tema      = getTemaTiempo(horaActual)
   const saludo    = getSaludo(tema)
   const gradiente = GRADIENTES_HEADER[tema]
   const colores   = COLORES_PILL[tema]
+
+  function manejarPill(id: SeccionActiva) {
+    cambiarSeccion(id)
+    if (id === 'pendientes') abrirDrawer('pendientes')
+    if (id === 'instagram')  abrirDrawer('instagram')
+  }
 
   return (
     <motion.header
@@ -66,14 +41,13 @@ export function PanelHeader() {
       transition={{ duration: 0.7, ease: 'easeInOut' }}
       className="h-[76px] flex items-center px-9 gap-4 flex-shrink-0 relative z-10"
     >
-      {/* Logo izquierda */}
+      {/* Logo */}
       <div className="flex flex-col gap-0.5 min-w-fit">
         <span
           style={{ color: colores.activo, fontFamily: 'var(--font-nunito)' }}
           className="font-black text-[22px] tracking-tight leading-none"
         >
-          NeptumStudio
-          <span style={{ color: '#E63B2E' }}>.</span>
+          NeptumStudio<span style={{ color: '#E63B2E' }}>.</span>
         </span>
         <span
           style={{ color: colores.texto, fontFamily: 'var(--font-dm-sans)' }}
@@ -83,20 +57,16 @@ export function PanelHeader() {
         </span>
       </div>
 
-      {/* Separador */}
-      <div
-        style={{ background: colores.texto }}
-        className="w-px h-5 opacity-20 flex-shrink-0"
-      />
+      <div style={{ background: colores.texto }} className="w-px h-5 opacity-20 flex-shrink-0" />
 
-      {/* Pills centradas */}
+      {/* Pills */}
       <nav className="flex-1 flex justify-center">
         <div
           style={{ background: `${colores.texto}14` }}
           className="flex items-center gap-1 rounded-full p-1"
         >
           {PILLS_NAV.map((pill) => {
-            const estaActiva = pillActiva === pill.id
+            const estaActiva = seccionActiva === pill.id
             return (
               <motion.button
                 key={pill.id}
@@ -119,9 +89,7 @@ export function PanelHeader() {
                 )}
                 <span className="relative z-10">{pill.etiqueta}</span>
                 {pill.tieneActividad && (
-                  <span
-                    className="relative z-10 w-1.5 h-1.5 rounded-full bg-[#E63B2E]"
-                  />
+                  <span className="relative z-10 w-1.5 h-1.5 rounded-full bg-[#E63B2E]" />
                 )}
               </motion.button>
             )
@@ -129,27 +97,16 @@ export function PanelHeader() {
         </div>
       </nav>
 
-      {/* Derecha: saludo + avatar */}
+      {/* Saludo + avatar */}
       <div className="flex items-center gap-3 min-w-fit">
         <div className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[#E63B2E] animate-pulse" />
-          <span
-            style={{ color: colores.texto }}
-            className="text-[11px] font-bold opacity-70"
-          >
+          <span style={{ color: colores.texto }} className="text-[11px] font-bold opacity-70">
             {saludo}
           </span>
         </div>
-        <div
-          style={{ background: '#E63B2E' }}
-          className="w-8 h-8 rounded-full flex items-center justify-center"
-        >
-          <span
-            style={{ fontFamily: 'var(--font-nunito)' }}
-            className="font-black text-[13px] text-white"
-          >
-            A
-          </span>
+        <div style={{ background: '#E63B2E' }} className="w-8 h-8 rounded-full flex items-center justify-center">
+          <span style={{ fontFamily: 'var(--font-nunito)' }} className="font-black text-[13px] text-white">A</span>
         </div>
       </div>
     </motion.header>
