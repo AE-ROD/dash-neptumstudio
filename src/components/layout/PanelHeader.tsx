@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getTemaTiempo, getSaludo, GRADIENTES_HEADER, COLORES_PILL } from '@/lib/tiempo'
+import { usePanelContext } from '@/context/PanelContext'
 
 const PILLS_NAV = [
   { id: 'inicio',      etiqueta: 'Inicio',      tieneActividad: false },
@@ -15,9 +16,14 @@ const PILLS_NAV = [
 
 type PillId = typeof PILLS_NAV[number]['id']
 
+function scrollA(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 export function PanelHeader() {
   const [horaActual,  setHoraActual]  = useState(new Date().getHours())
   const [pillActiva,  setPillActiva]  = useState<PillId>('inicio')
+  const { abrirDrawer } = usePanelContext()
 
   useEffect(() => {
     const intervalo = setInterval(() => {
@@ -25,6 +31,29 @@ export function PanelHeader() {
     }, 60_000)
     return () => clearInterval(intervalo)
   }, [])
+
+  function manejarPill(id: PillId) {
+    setPillActiva(id)
+    switch (id) {
+      case 'inicio':
+        document.getElementById('panel-main')?.scrollTo({ top: 0, behavior: 'smooth' })
+        break
+      case 'ingresos':
+        scrollA('seccion-stats')
+        break
+      case 'proyectos':
+      case 'clientes':
+      case 'pipeline':
+        scrollA('seccion-proyectos')
+        break
+      case 'pendientes':
+        abrirDrawer('pendientes')
+        break
+      case 'instagram':
+        abrirDrawer('instagram')
+        break
+    }
+  }
 
   const tema      = getTemaTiempo(horaActual)
   const saludo    = getSaludo(tema)
@@ -71,7 +100,7 @@ export function PanelHeader() {
             return (
               <motion.button
                 key={pill.id}
-                onClick={() => setPillActiva(pill.id)}
+                onClick={() => manejarPill(pill.id)}
                 style={{
                   color: estaActiva ? colores.activoTexto : colores.texto,
                   fontFamily: 'var(--font-dm-sans)',
