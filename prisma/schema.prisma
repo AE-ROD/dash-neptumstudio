@@ -1,15 +1,141 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  output   = "../src/app/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Project {
+  id            String        @id @default(cuid())
+  nombre        String
+  descripcion   String?
+  stack         String[]
+  estado        ProjectEstado @default(ACTIVO)
+  progreso      Int           @default(0)
+  repoUrl       String?
+  rutaLocal     String?
+  ultimaNota    String?
+  proximoPaso   String?
+  creadoEn      DateTime      @default(now())
+  actualizadoEn DateTime      @updatedAt
+  notas         Note[]
+  ideas         Idea[]        @relation("ProyectoIdeas")
+  propuestas    Proposal[]
+}
+
+model Proposal {
+  id             String         @id @default(cuid())
+  nombreCliente  String
+  clienteId      String?
+  cliente        Client?        @relation(fields: [clienteId], references: [id])
+  descripcion    String?
+  monto          Float?
+  estado         ProposalEstado @default(LEAD)
+  ultimoContacto DateTime?
+  notas          String?
+  proyectoId     String?
+  proyecto       Project?       @relation(fields: [proyectoId], references: [id])
+  creadoEn       DateTime       @default(now())
+  actualizadoEn  DateTime       @updatedAt
+}
+
+model Client {
+  id            String     @id @default(cuid())
+  nombre        String
+  tipo          ClientTipo @default(PERSONA)
+  email         String?
+  telefono      String?
+  ciudad        String?
+  propuestas    Proposal[]
+  creadoEn      DateTime   @default(now())
+  actualizadoEn DateTime   @updatedAt
+}
+
+model Pending {
+  id          String    @id @default(cuid())
+  texto       String
+  completado  Boolean   @default(false)
+  fechaLimite DateTime?
+  estaSemana  Boolean   @default(true)
+  fuente      String    @default("panel")
+  creadoEn    DateTime  @default(now())
+}
+
+model Idea {
+  id                 String       @id @default(cuid())
+  texto              String
+  fuente             String       @default("panel")
+  etiqueta           IdeaEtiqueta @default(IDEA)
+  estado             IdeaEstado   @default(NUEVA)
+  desarrollo         String?
+  proximoPensamiento String?
+  proyectoId         String?
+  proyecto           Project?     @relation("ProyectoIdeas", fields: [proyectoId], references: [id])
+  creadoEn           DateTime     @default(now())
+  actualizadoEn      DateTime     @updatedAt
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  contenido  String
+  proyectoId String
+  proyecto   Project  @relation(fields: [proyectoId], references: [id])
+  creadoEn   DateTime @default(now())
+}
+
+model InstagramSnapshot {
+  id                 String   @id @default(cuid())
+  seguidores         Int
+  publicaciones      Int?
+  alcancePromedio    Int?
+  crecimientoSemanal Int?
+  registradoEn       DateTime @default(now())
+}
+
+model Revenue {
+  id          String   @id @default(cuid())
+  monto       Float
+  descripcion String?
+  mes         Int
+  anio        Int
+  propuestaId String?
+  creadoEn    DateTime @default(now())
+}
+
+enum ProjectEstado {
+  ACTIVO
+  PAUSADO
+  COMPLETADO
+  ARCHIVADO
+}
+
+enum ProposalEstado {
+  LEAD
+  PROPUESTA
+  ACTIVO
+  CERRADO
+}
+
+enum ClientTipo {
+  PERSONA
+  EMPRESA
+}
+
+enum IdeaEtiqueta {
+  IDEA
+  MEJORA
+  OPORTUNIDAD
+  TAREA
+}
+
+enum IdeaEstado {
+  NUEVA
+  EN_REVISION
+  DESARROLLANDO
+  COMPLETADA
+  DESCARTADA
 }
