@@ -15,9 +15,16 @@ const COLOR_ESTADO: Record<CotizacionEstado, string> = {
   BORRADOR: '#415466', ENVIADA: '#3B5BDB', APROBADA: '#1A7F4B', RECHAZADA: '#C92A2A',
 }
 
+// Info fija de NeptumStudio — actualizar cuando tengas datos reales
+const NEPTUM = {
+  email:    'hola@neptumstudio.com',
+  web:      'www.neptumstudio.com',
+  telefono: '+56 9 XXXX XXXX',
+  pais:     'Santiago, Chile',
+}
+
 const itemVacio = (): CotizacionItem => ({ descripcion: '', cantidad: 1, precioUnit: 0 })
 
-// Trident SVG inline
 function TridentIcon({ size = 20, color = '#F6F4F0' }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
@@ -48,6 +55,7 @@ export function CotizacionModal() {
   const [estado,        setEstado]        = useState<CotizacionEstado>('BORRADOR')
   const [items,         setItems]         = useState<CotizacionItem[]>([itemVacio()])
   const [notas,         setNotas]         = useState('')
+  const [validez,       setValidez]       = useState(30)
   const [guardando,     setGuardando]     = useState(false)
 
   useEffect(() => {
@@ -60,7 +68,7 @@ export function CotizacionModal() {
       setNotas(cotizacion.notas ?? '')
     } else {
       setNombreCliente(''); setClienteId(''); setEstado('BORRADOR')
-      setItems([itemVacio()]); setNotas('')
+      setItems([itemVacio()]); setNotas(''); setValidez(30)
     }
   }, [estaAbierto, idSeleccionado]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -94,44 +102,46 @@ export function CotizacionModal() {
     finally { setGuardando(false) }
   }
 
-  // Número de cotización formateado
   const numeroCot = cotizacion
     ? `NS-${String(cotizaciones.indexOf(cotizacion) + 1).padStart(3, '0')}`
     : `NS-${String(cotizaciones.length + 1).padStart(3, '0')}`
 
   const contactoData = contactos.find(c => c.id === clienteId)
-  const fechaHoy = new Date().toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })
+
+  const fechaEmision = new Date()
+  const fechaValidez = new Date(fechaEmision)
+  fechaValidez.setDate(fechaValidez.getDate() + validez)
+
+  const fmtFecha = (d: Date) => d.toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })
+
+  const itemsFiltrados = items.filter(i => i.descripcion.trim())
 
   return (
     <ModalBase estaAbierto={estaAbierto}>
-      {/* Header */}
+      {/* Header del modal */}
       <div className="bg-[#0D1B2A] px-6 py-4 flex items-center gap-3 flex-shrink-0">
-        <TridentIcon size={22} color="#F6F4F0" />
+        <TridentIcon size={20} color="#F6F4F0" />
         <div className="flex-1">
-          <div className="font-semibold text-[13px] text-white tracking-widest uppercase"
-            style={{ fontFamily: 'var(--font-dm-sans)', letterSpacing: '0.1em' }}>
+          <div className="font-semibold text-[12px] text-white tracking-[0.12em] uppercase"
+            style={{ fontFamily: 'var(--font-dm-sans)' }}>
             {esEdicion ? 'Editar cotización' : 'Nueva cotización'}
           </div>
           {total > 0 && (
-            <div className="text-[12px]" style={{ color: '#A7ADBA', fontFamily: 'var(--font-cormorant)' }}>
-              Total: ${total.toLocaleString('es-CL')}
+            <div className="text-[12px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-cormorant)' }}>
+              ${total.toLocaleString('es-CL')}
             </div>
           )}
         </div>
 
-        {/* Toggle form / preview */}
-        <div className="flex bg-white/10 rounded-full p-0.5 gap-0.5">
+        <div className="flex bg-white/10 rounded-full p-0.5">
           {(['form', 'preview'] as Vista[]).map(v => (
-            <button
-              key={v}
-              onClick={() => setVista(v)}
+            <button key={v} onClick={() => setVista(v)}
               className="text-[10px] font-semibold px-3 py-1.5 rounded-full transition-all"
               style={{
                 fontFamily: 'var(--font-dm-sans)',
                 background: vista === v ? '#F6F4F0' : 'transparent',
                 color: vista === v ? '#0D1B2A' : '#A7ADBA',
-              }}
-            >
+              }}>
               {v === 'form' ? 'Formulario' : 'Vista previa'}
             </button>
           ))}
@@ -176,25 +186,37 @@ export function CotizacionModal() {
                   style={{ fontFamily: 'var(--font-dm-sans)' }} />
               </div>
 
-              {/* Estado */}
-              <div>
-                <label className="text-[10px] font-bold text-[#A7ADBA] uppercase tracking-widest block mb-2"
-                  style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                  Estado
-                </label>
-                <div className="flex gap-2 flex-wrap">
-                  {ESTADOS.map(e => (
-                    <button key={e} onClick={() => setEstado(e)}
-                      className="text-[11px] font-semibold px-3 py-1.5 rounded-full border transition-all"
-                      style={{
-                        fontFamily: 'var(--font-dm-sans)',
-                        borderColor: estado === e ? COLOR_ESTADO[e] : '#E4E8EE',
-                        background:  estado === e ? COLOR_ESTADO[e] : 'transparent',
-                        color:       estado === e ? 'white' : '#415466',
-                      }}>
-                      {LABEL_ESTADO[e]}
-                    </button>
-                  ))}
+              {/* Estado + Validez */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-[10px] font-bold text-[#A7ADBA] uppercase tracking-widest block mb-2"
+                    style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                    Estado
+                  </label>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {ESTADOS.map(e => (
+                      <button key={e} onClick={() => setEstado(e)}
+                        className="text-[10px] font-semibold px-2.5 py-1.5 rounded-full border transition-all"
+                        style={{
+                          fontFamily: 'var(--font-dm-sans)',
+                          borderColor: estado === e ? COLOR_ESTADO[e] : '#E4E8EE',
+                          background:  estado === e ? COLOR_ESTADO[e] : 'transparent',
+                          color:       estado === e ? 'white' : '#415466',
+                        }}>
+                        {LABEL_ESTADO[e]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-[#A7ADBA] uppercase tracking-widest block mb-2"
+                    style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                    Válido por (días)
+                  </label>
+                  <input value={validez} onChange={e => setValidez(parseInt(e.target.value) || 30)}
+                    type="number" min="1" max="365"
+                    className="w-full bg-[#F8F9FB] border border-[#E4E8EE] rounded-xl px-3 py-2.5 text-[12px] text-[#0D1B2A] outline-none focus:border-[#0D1B2A] transition-colors"
+                    style={{ fontFamily: 'var(--font-dm-sans)' }} />
                 </div>
               </div>
 
@@ -211,15 +233,12 @@ export function CotizacionModal() {
                     + Agregar línea
                   </button>
                 </div>
-
-                {/* Cabecera columnas */}
                 <div className="grid grid-cols-[1fr_48px_80px_28px] gap-2 px-1 mb-1">
                   {['Descripción', 'Cant.', 'Precio', ''].map(h => (
                     <span key={h} className="text-[9px] font-bold text-[#C5CBD6] uppercase tracking-widest"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>{h}</span>
                   ))}
                 </div>
-
                 <div className="flex flex-col gap-1.5">
                   {items.map((item, idx) => (
                     <div key={idx} className="grid grid-cols-[1fr_48px_80px_28px] gap-2 items-center">
@@ -244,8 +263,6 @@ export function CotizacionModal() {
                     </div>
                   ))}
                 </div>
-
-                {/* Total */}
                 {total > 0 && (
                   <div className="flex justify-between items-center mt-3 pt-3 border-t border-[#F0F2F5]">
                     <span className="text-[10px] font-bold text-[#A7ADBA] uppercase tracking-widest"
@@ -262,176 +279,257 @@ export function CotizacionModal() {
               <div>
                 <label className="text-[10px] font-bold text-[#A7ADBA] uppercase tracking-widest block mb-2"
                   style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                  Notas
+                  Notas / Condiciones
                 </label>
                 <textarea value={notas} onChange={e => setNotas(e.target.value)}
-                  placeholder="Condiciones de pago, validez de la cotización, aclaraciones..."
+                  placeholder="Condiciones de pago, forma de entrega, garantías..."
                   className="w-full bg-[#F8F9FB] border border-[#E4E8EE] rounded-xl px-3 py-2.5 text-[12px] text-[#0D1B2A] placeholder-[#C5CBD6] resize-none outline-none focus:border-[#0D1B2A] transition-colors h-20"
                   style={{ fontFamily: 'var(--font-dm-sans)' }} />
               </div>
             </motion.div>
           )}
 
-          {/* ── VISTA PREVIA DEL DOCUMENTO ── */}
+          {/* ── VISTA PREVIA ── */}
           {vista === 'preview' && (
             <motion.div key="preview"
               initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 8 }}
               transition={{ duration: 0.15 }}
-              className="bg-[#F6F4F0]"
+              className="bg-[#EDECEA] p-5"
             >
-              {/* Documento */}
-              <div className="mx-4 my-4 bg-white rounded-xl overflow-hidden shadow-sm border border-[#E8E6E0]">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-md border border-[#E0DDD8]"
+                style={{ fontFamily: 'var(--font-dm-sans)' }}>
 
-                {/* Cabecera del documento */}
-                <div className="bg-[#0D1B2A] px-8 py-6">
+                {/* ── CABECERA: azul navy completo ── */}
+                <div className="bg-[#0D1B2A] px-8 pt-7 pb-6">
                   <div className="flex items-start justify-between">
+
+                    {/* Logo + nombre */}
                     <div className="flex items-center gap-3">
-                      <TridentIcon size={32} color="#F6F4F0" />
+                      <TridentIcon size={36} color="#F6F4F0" />
                       <div>
-                        <div className="text-white tracking-[0.2em] text-[14px] font-medium uppercase"
+                        <div className="text-[#F6F4F0] text-[16px] tracking-[0.25em] font-medium uppercase"
                           style={{ fontFamily: 'var(--font-dm-sans)' }}>
                           neptumstudio
                         </div>
-                        <div className="text-[#A7ADBA] text-[9px] tracking-widest uppercase mt-0.5"
+                        <div className="text-[#A7ADBA] text-[8.5px] tracking-[0.18em] uppercase mt-1"
                           style={{ fontFamily: 'var(--font-dm-sans)' }}>
                           Desarrollamos soluciones digitales
                         </div>
                       </div>
                     </div>
+
+                    {/* Título "Cotización" enorme */}
                     <div className="text-right">
-                      <div className="text-[#F6F4F0] text-[22px] font-light"
-                        style={{ fontFamily: 'var(--font-cormorant)' }}>
+                      <div className="text-[#F6F4F0] font-light leading-none"
+                        style={{ fontFamily: 'var(--font-cormorant)', fontSize: '46px', letterSpacing: '-0.01em' }}>
                         Cotización
                       </div>
-                      <div className="text-[#A7ADBA] text-[11px] font-mono mt-0.5">
+                      <div className="text-[#A7ADBA] text-[11px] font-mono mt-1.5 tracking-widest">
                         {numeroCot}
                       </div>
                     </div>
                   </div>
+
+                  {/* Línea divisora sutil */}
+                  <div className="mt-5 border-t border-white/10" />
                 </div>
 
-                {/* Info cliente + fecha */}
-                <div className="px-8 py-5 grid grid-cols-2 gap-6 border-b border-[#F0EDE8]">
-                  <div>
-                    <div className="text-[9px] font-bold text-[#A7ADBA] uppercase tracking-widest mb-2"
+                {/* ── SECCIÓN DE 3 COLUMNAS: Remitente · Para · Detalles ── */}
+                <div className="grid grid-cols-3 divide-x divide-[#F0EDE8] border-b border-[#F0EDE8]">
+
+                  {/* Col 1 — Remitente */}
+                  <div className="px-6 py-5">
+                    <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-3"
+                      style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                      Remitente
+                    </div>
+                    <div className="text-[15px] font-medium text-[#0D1B2A] mb-2"
+                      style={{ fontFamily: 'var(--font-cormorant)', lineHeight: 1.2 }}>
+                      NeptumStudio
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      {[
+                        { icon: '✉', val: NEPTUM.email },
+                        { icon: '🌐', val: NEPTUM.web },
+                        { icon: '📞', val: NEPTUM.telefono },
+                        { icon: '📍', val: NEPTUM.pais },
+                      ].map(row => (
+                        <div key={row.val} className="flex items-center gap-1.5">
+                          <span className="text-[9px] opacity-40">{row.icon}</span>
+                          <span className="text-[10px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                            {row.val}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Col 2 — Para (cliente) */}
+                  <div className="px-6 py-5">
+                    <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-3"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
                       Para
                     </div>
-                    <div className="text-[16px] font-medium text-[#0D1B2A]"
-                      style={{ fontFamily: 'var(--font-cormorant)' }}>
-                      {nombreCliente || '—'}
+                    <div className="text-[15px] font-medium text-[#0D1B2A] mb-2"
+                      style={{ fontFamily: 'var(--font-cormorant)', lineHeight: 1.2 }}>
+                      {nombreCliente || <span className="text-[#C5CBD6]">—</span>}
                     </div>
-                    {contactoData?.marca && (
-                      <div className="text-[11px] text-[#415466] mt-0.5" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                        {contactoData.marca}
-                      </div>
-                    )}
-                    {contactoData?.email && (
-                      <div className="text-[10px] text-[#A7ADBA] mt-0.5" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                        {contactoData.email}
-                      </div>
-                    )}
+                    <div className="flex flex-col gap-1">
+                      {contactoData?.marca && (
+                        <div className="text-[10px] text-[#415466]">{contactoData.marca}</div>
+                      )}
+                      {contactoData?.email && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[9px] opacity-40">✉</span>
+                          <span className="text-[10px] text-[#415466]">{contactoData.email}</span>
+                        </div>
+                      )}
+                      {contactoData?.telefono && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[9px] opacity-40">📞</span>
+                          <span className="text-[10px] text-[#415466]">{contactoData.telefono}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-[9px] font-bold text-[#A7ADBA] uppercase tracking-widest mb-2"
+
+                  {/* Col 3 — Detalles del documento */}
+                  <div className="px-6 py-5">
+                    <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-3"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                      Fecha
+                      Detalles
                     </div>
-                    <div className="text-[13px] text-[#0D1B2A]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                      {fechaHoy}
-                    </div>
-                    <div className="mt-2">
-                      <span className="text-[9px] font-bold text-[#A7ADBA] uppercase tracking-widest block"
-                        style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                        Estado
-                      </span>
-                      <span className="text-[11px] font-semibold" style={{ color: COLOR_ESTADO[estado], fontFamily: 'var(--font-dm-sans)' }}>
-                        {LABEL_ESTADO[estado]}
-                      </span>
+                    <div className="flex flex-col gap-2.5">
+                      {[
+                        { label: 'Número',       value: numeroCot },
+                        { label: 'Emisión',       value: fmtFecha(fechaEmision) },
+                        { label: 'Válido hasta',  value: fmtFecha(fechaValidez) },
+                        { label: 'Estado',        value: LABEL_ESTADO[estado], color: COLOR_ESTADO[estado] },
+                        { label: 'Forma de pago', value: 'Transferencia bancaria' },
+                      ].map(row => (
+                        <div key={row.label}>
+                          <div className="text-[8px] font-bold text-[#C5CBD6] uppercase tracking-widest"
+                            style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                            {row.label}
+                          </div>
+                          <div className="text-[11px] font-medium mt-0.5"
+                            style={{ fontFamily: 'var(--font-dm-sans)', color: row.color ?? '#0D1B2A' }}>
+                            {row.value}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Tabla de servicios */}
-                <div className="px-8 py-5">
-                  <div className="text-[9px] font-bold text-[#A7ADBA] uppercase tracking-widest mb-3"
+                {/* ── TABLA DE SERVICIOS ── */}
+                <div className="px-8 py-6">
+                  <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-4"
                     style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                    Servicios
+                    Servicios contratados
                   </div>
 
-                  {/* Cabecera tabla */}
-                  <div className="grid grid-cols-[1fr_60px_80px_80px] gap-2 pb-2 border-b border-[#0D1B2A]">
-                    {['Descripción', 'Cant.', 'Precio unit.', 'Subtotal'].map(h => (
-                      <span key={h} className="text-[9px] font-bold text-[#0D1B2A] uppercase tracking-wider"
-                        style={{ fontFamily: 'var(--font-dm-sans)', textAlign: h !== 'Descripción' ? 'right' : 'left' }}>
-                        {h}
+                  {/* Cabecera */}
+                  <div className="grid grid-cols-[1fr_52px_88px_88px] gap-3 pb-2.5 border-b-2 border-[#0D1B2A]">
+                    {[
+                      { label: 'Descripción',  align: 'left'  },
+                      { label: 'Cant.',         align: 'center'},
+                      { label: 'Precio unit.',  align: 'right' },
+                      { label: 'Subtotal',      align: 'right' },
+                    ].map(h => (
+                      <span key={h.label}
+                        className="text-[9px] font-bold text-[#0D1B2A] uppercase tracking-wider"
+                        style={{ fontFamily: 'var(--font-dm-sans)', textAlign: h.align as 'left' | 'center' | 'right' }}>
+                        {h.label}
                       </span>
                     ))}
                   </div>
 
                   {/* Filas */}
-                  {items.filter(i => i.descripcion.trim()).map((item, idx) => (
-                    <div key={idx} className="grid grid-cols-[1fr_60px_80px_80px] gap-2 py-2.5 border-b border-[#F0EDE8]">
+                  {itemsFiltrados.length > 0 ? itemsFiltrados.map((item, idx) => (
+                    <div key={idx}
+                      className="grid grid-cols-[1fr_52px_88px_88px] gap-3 py-3 border-b border-[#F5F2EE] items-baseline"
+                      style={{ background: idx % 2 === 0 ? 'white' : '#FAFAF8' }}>
                       <span className="text-[12px] text-[#0D1B2A]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                         {item.descripcion}
                       </span>
-                      <span className="text-[12px] text-[#415466] text-right" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                      <span className="text-[12px] text-[#415466] text-center" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                         {item.cantidad}
                       </span>
                       <span className="text-[12px] text-[#415466] text-right" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                         ${Number(item.precioUnit).toLocaleString('es-CL')}
                       </span>
-                      <span className="text-[12px] font-semibold text-[#0D1B2A] text-right" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                      <span className="text-[12px] font-semibold text-[#0D1B2A] text-right"
+                        style={{ fontFamily: 'var(--font-dm-sans)' }}>
                         ${(Number(item.cantidad) * Number(item.precioUnit)).toLocaleString('es-CL')}
                       </span>
                     </div>
-                  ))}
-
-                  {items.filter(i => i.descripcion.trim()).length === 0 && (
-                    <div className="py-4 text-center text-[11px] text-[#C5CBD6]"
+                  )) : (
+                    <div className="py-5 text-center text-[11px] text-[#C5CBD6]"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
                       Sin servicios agregados
                     </div>
                   )}
 
-                  {/* Total final */}
-                  <div className="flex justify-between items-center pt-3 mt-1">
-                    <span className="text-[10px] font-bold text-[#A7ADBA] uppercase tracking-widest"
-                      style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                      Total
-                    </span>
-                    <span className="text-[24px] font-medium text-[#0D1B2A]"
-                      style={{ fontFamily: 'var(--font-cormorant)' }}>
-                      ${total.toLocaleString('es-CL')}
-                    </span>
+                  {/* Subtotal + Total */}
+                  <div className="mt-4 flex justify-end">
+                    <div className="w-56">
+                      <div className="flex justify-between py-2 border-b border-[#F0EDE8]">
+                        <span className="text-[11px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                          Subtotal
+                        </span>
+                        <span className="text-[11px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                          ${total.toLocaleString('es-CL')}
+                        </span>
+                      </div>
+                      <div className="flex justify-between py-2 border-b border-[#F0EDE8]">
+                        <span className="text-[11px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                          IVA (19%)
+                        </span>
+                        <span className="text-[11px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                          ${Math.round(total * 0.19).toLocaleString('es-CL')}
+                        </span>
+                      </div>
+                      <div className="flex justify-between pt-3 items-baseline">
+                        <span className="text-[10px] font-bold text-[#0D1B2A] uppercase tracking-widest"
+                          style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                          Total
+                        </span>
+                        <span className="font-light text-[30px] text-[#0D1B2A] leading-none"
+                          style={{ fontFamily: 'var(--font-cormorant)' }}>
+                          ${Math.round(total * 1.19).toLocaleString('es-CL')}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Notas */}
+                {/* ── NOTAS ── */}
                 {notas && (
-                  <div className="px-8 pb-5">
-                    <div className="bg-[#F8F7F4] rounded-xl px-4 py-3 border-l-2 border-[#A7ADBA]">
-                      <div className="text-[9px] font-bold text-[#A7ADBA] uppercase tracking-widest mb-1"
+                  <div className="px-8 pb-6">
+                    <div className="bg-[#F8F7F4] rounded-xl px-5 py-4 border-l-[3px] border-[#18263B]">
+                      <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-1.5"
                         style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                        Notas
+                        Notas y condiciones
                       </div>
-                      <p className="text-[11px] text-[#415466] leading-relaxed" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                      <p className="text-[11px] text-[#415466] leading-relaxed"
+                        style={{ fontFamily: 'var(--font-dm-sans)' }}>
                         {notas}
                       </p>
                     </div>
                   </div>
                 )}
 
-                {/* Footer del documento */}
-                <div className="bg-[#F8F7F4] px-8 py-4 flex items-center justify-between border-t border-[#E8E6E0]">
-                  <div className="flex items-center gap-2">
-                    <TridentIcon size={14} color="#A7ADBA" />
-                    <span className="text-[9px] text-[#A7ADBA] tracking-widest uppercase"
+                {/* ── FOOTER ── */}
+                <div className="bg-[#0D1B2A] px-8 py-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <TridentIcon size={13} color="#415466" />
+                    <span className="text-[8.5px] text-[#415466] tracking-[0.15em] uppercase"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                      neptumstudio · Desarrollamos soluciones digitales
+                      neptumstudio · {NEPTUM.email} · {NEPTUM.web}
                     </span>
                   </div>
-                  <span className="text-[9px] text-[#C5CBD6] font-mono">{numeroCot}</span>
+                  <span className="text-[9px] text-[#415466] font-mono">{numeroCot}</span>
                 </div>
               </div>
             </motion.div>
@@ -440,11 +538,9 @@ export function CotizacionModal() {
         </AnimatePresence>
       </div>
 
-      {/* Footer acciones */}
+      {/* Footer del modal */}
       <div className="px-6 py-4 border-t border-[#F0F2F5] flex justify-between items-center flex-shrink-0">
-        <div className="text-[10px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-          {numeroCot}
-        </div>
+        <div className="text-[10px] text-[#C5CBD6] font-mono">{numeroCot}</div>
         <div className="flex gap-2">
           <button onClick={cerrarOverlay}
             className="border border-[#E4E8EE] text-[#415466] text-[11px] font-semibold px-4 py-2 rounded-full hover:border-[#0D1B2A] transition-colors"
@@ -453,11 +549,7 @@ export function CotizacionModal() {
           </button>
           <button onClick={guardar} disabled={!nombreCliente.trim() || guardando}
             className="text-[11px] font-semibold px-5 py-2 rounded-full disabled:opacity-40 transition-all"
-            style={{
-              fontFamily: 'var(--font-dm-sans)',
-              background: '#0D1B2A',
-              color: '#F6F4F0',
-            }}>
+            style={{ fontFamily: 'var(--font-dm-sans)', background: '#0D1B2A', color: '#F6F4F0' }}>
             {guardando ? 'Guardando...' : esEdicion ? 'Guardar cambios →' : 'Crear cotización →'}
           </button>
         </div>
