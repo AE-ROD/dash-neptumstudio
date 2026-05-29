@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { usePanelContext } from '@/context/PanelContext'
 import { useProposals } from '@/hooks/useProposals'
 import { ModalBase } from './ModalBase'
-import type { ProposalEstado } from '@/types/panel'
+import type { Propuesta, ProposalEstado } from '@/types/panel'
 
 const ESTADOS_PIPELINE: ProposalEstado[] = ['LEAD', 'PROPUESTA', 'ACTIVO', 'CERRADO']
 const ETIQUETAS_ESTADO: Record<ProposalEstado, string> = {
@@ -12,30 +12,42 @@ const ETIQUETAS_ESTADO: Record<ProposalEstado, string> = {
 
 export function PropuestaModal() {
   const { modalAbierto, idSeleccionado, cerrarOverlay } = usePanelContext()
-  const { propuestas, actualizarPropuesta } = useProposals()
+  const { actualizarPropuesta, recargar } = useProposals()
 
-  const propuesta = propuestas.find(p => p.id === idSeleccionado)
   const estaAbierto = modalAbierto === 'propuesta'
 
-  const [estadoLocal, setEstadoLocal] = useState<ProposalEstado>(propuesta?.estado ?? 'LEAD')
-  const [notasLocal,  setNotasLocal]  = useState(propuesta?.notas ?? '')
+  const [propuesta,   setPropuesta]   = useState<Propuesta | null>(null)
+  const [cargando,    setCargando]    = useState(false)
+  const [estadoLocal, setEstadoLocal] = useState<ProposalEstado>('LEAD')
+  const [notasLocal,  setNotasLocal]  = useState('')
   const [guardando,   setGuardando]   = useState(false)
 
-  // Sincronizar estado local solo cuando cambia el ID de la propuesta
-  const propuestaId = propuesta?.id
+  // Cargar propuesta por ID cuando se abre el modal
   useEffect(() => {
-    if (propuesta) {
-      setEstadoLocal(propuesta.estado)
-      setNotasLocal(propuesta.notas ?? '')
+    if (!estaAbierto || !idSeleccionado) {
+      setPropuesta(null)
+      return
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propuestaId])
+    setCargando(true)
+    fetch(`/api/proposals/${idSeleccionado}`)
+      .then(r => r.ok ? r.json() : null)
+      .then((data: Propuesta | null) => {
+        if (data) {
+          setPropuesta(data)
+          setEstadoLocal(data.estado)
+          setNotasLocal(data.notas ?? '')
+        }
+      })
+      .catch(() => null)
+      .finally(() => setCargando(false))
+  }, [estaAbierto, idSeleccionado])
 
   async function guardarCambios() {
     if (!propuesta) return
     setGuardando(true)
     try {
       await actualizarPropuesta(propuesta.id, { estado: estadoLocal, notas: notasLocal })
+      await recargar()
       cerrarOverlay()
     } catch {
       // Error silencioso — el usuario ve que el botón regresa a "Guardar cambios"
@@ -46,7 +58,13 @@ export function PropuestaModal() {
 
   return (
     <ModalBase estaAbierto={estaAbierto}>
-      {propuesta && (
+      {cargando ? (
+        <div className="p-10 flex items-center justify-center">
+          <span className="text-[12px] text-[#bbb]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+            Cargando propuesta…
+          </span>
+        </div>
+      ) : propuesta ? (
         <>
           {/* Header */}
           <div className="bg-[#111] px-6 py-4 flex items-center gap-3">
@@ -107,7 +125,7 @@ export function PropuestaModal() {
             {propuesta.descripcion && (
               <div>
                 <span className="text-[10px] font-bold text-[#bbb] uppercase tracking-widest block mb-1.5">
-                  Descripción
+                  Descripción del proyecto
                 </span>
                 <p className="text-[12px] text-[#555]">{propuesta.descripcion}</p>
               </div>
@@ -121,7 +139,7 @@ export function PropuestaModal() {
               <textarea
                 value={notasLocal}
                 onChange={e => setNotasLocal(e.target.value)}
-                placeholder="Notas sobre esta propuesta..."
+                placeholder="Seguimiento, próximos pasos, detalles del cliente..."
                 className="w-full bg-[#FAFAF9] border border-[#EAEAE8] rounded-lg px-3 py-2.5 text-[12px] text-[#111] placeholder-[#ccc] resize-none outline-none focus:border-[#111] transition-colors h-24"
                 style={{ fontFamily: 'var(--font-dm-sans)' }}
               />
@@ -146,7 +164,7 @@ export function PropuestaModal() {
             </button>
           </div>
         </>
-      )}
+      ) : null}
     </ModalBase>
   )
 }

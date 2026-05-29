@@ -60,7 +60,15 @@ export default function PaginaPanel() {
             </motion.div>
           )}
 
-          {filas.includes('listas') && (
+          {filas.includes('listas') && seccionActiva === 'pipeline' && (
+            <motion.div key="listas-pipeline" {...fade}
+              className="grid grid-cols-1 gap-3"
+            >
+              <PipelineListWidget />
+            </motion.div>
+          )}
+
+          {filas.includes('listas') && seccionActiva !== 'pipeline' && (
             <motion.div key="listas" {...fade}
               className="grid grid-cols-[2fr_1fr] gap-3"
             >

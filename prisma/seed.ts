@@ -57,9 +57,9 @@ async function main() {
 
   await prisma.proposal.createMany({
     data: [
-      { nombreCliente: 'Lucas M.', descripcion: 'Landing page', monto: 800, estado: 'PROPUESTA' },
-      { nombreCliente: 'Clínica Norte', descripcion: 'Dashboard admin', monto: 2400, estado: 'LEAD' },
-      { nombreCliente: 'Tienda Orgánica', descripcion: 'E-commerce', monto: 1800, estado: 'ACTIVO' },
+      { nombreCliente: 'Cliente A', descripcion: 'Sitio web corporativo + branding', monto: 1200, estado: 'PROPUESTA' },
+      { nombreCliente: 'Cliente B', descripcion: 'App móvil React Native', monto: 3500, estado: 'LEAD' },
+      { nombreCliente: 'Cliente C', descripcion: 'Dashboard de gestión web', monto: 2200, estado: 'ACTIVO' },
     ],
   })
 
@@ -73,7 +73,7 @@ async function main() {
   })
 
   await prisma.instagramSnapshot.create({
-    data: { seguidores: 847, publicaciones: 12, alcancePromedio: 340, crecimientoSemanal: 23 },
+    data: { seguidores: 3, publicaciones: 0, alcancePromedio: 0, crecimientoSemanal: 0 },
   })
 
   await prisma.revenue.create({

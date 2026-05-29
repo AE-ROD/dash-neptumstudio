@@ -3,6 +3,21 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@/app/generated/prisma/client'
 
+export async function GET(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const propuesta = await prisma.proposal.findUnique({ where: { id }, include: { cliente: true } })
+    if (!propuesta) return NextResponse.json({ error: 'No encontrado' }, { status: 404 })
+    return NextResponse.json(propuesta)
+  } catch (error) {
+    console.error('[api/proposals GET id]', error)
+    return NextResponse.json({ error: 'Error al obtener propuesta' }, { status: 500 })
+  }
+}
+
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
