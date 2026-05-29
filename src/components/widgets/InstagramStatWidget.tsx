@@ -22,7 +22,7 @@ export function InstagramStatWidget() {
         className="text-[30px] font-black text-[#111] leading-none tracking-tight"
         style={{ fontFamily: 'var(--font-nunito)' }}
       >
-        {cargando ? '—' : snapshot?.seguidores.toLocaleString('es-CL')}
+        {cargando ? '—' : (snapshot?.seguidores.toLocaleString('es-CL') ?? '—')}
       </span>
       <span className="self-start bg-[#111] text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full">
         +{snapshot?.crecimientoSemanal ?? 0} sem.

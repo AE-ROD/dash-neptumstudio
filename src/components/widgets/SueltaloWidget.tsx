@@ -20,15 +20,18 @@ export function SueltaloWidget() {
     if (!texto.trim()) return
     setGuardando(true)
     try {
-      await fetch('/api/capture', {
+      const res = await fetch('/api/capture', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ texto, tipoForzado: tipoSeleccionado }),
       })
+      if (!res.ok) throw new Error('Error al guardar captura')
       setTexto('')
       setTipoSeleccionado(null)
       setGuardado(true)
       setTimeout(() => setGuardado(false), 2000)
+    } catch {
+      // Silently fail — usuario puede reintentar
     } finally {
       setGuardando(false)
     }

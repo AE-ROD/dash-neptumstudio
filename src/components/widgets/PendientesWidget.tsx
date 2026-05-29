@@ -41,6 +41,7 @@ export function PendientesWidget() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
+                style={{ overflow: 'hidden' }}
                 className="flex items-start gap-2.5 py-1.5 border-b border-[#F5F5F3] last:border-0"
               >
                 <button
