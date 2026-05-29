@@ -8,6 +8,10 @@ interface SparklineProps {
 }
 
 function normalizarPuntos(puntos: number[], ancho: number, alto: number): string {
+  if (puntos.length <= 1) {
+    // Un solo punto — línea horizontal centrada
+    return `0,${alto / 2} ${ancho},${alto / 2}`
+  }
   const min = Math.min(...puntos)
   const max = Math.max(...puntos)
   const rango = max - min || 1
@@ -34,13 +38,16 @@ export function Sparkline({
 
   useEffect(() => {
     if (!pathRef.current) return
-    const longitud = pathRef.current.getTotalLength?.() ?? 300
+    const longitud = pathRef.current.getTotalLength()
     pathRef.current.style.strokeDasharray  = `${longitud}`
     pathRef.current.style.strokeDashoffset = `${longitud}`
+    // Doble rAF para garantizar que el navegador commit el estado inicial antes de animar
     requestAnimationFrame(() => {
-      if (!pathRef.current) return
-      pathRef.current.style.transition = 'stroke-dashoffset 1s ease-out'
-      pathRef.current.style.strokeDashoffset = '0'
+      requestAnimationFrame(() => {
+        if (!pathRef.current) return
+        pathRef.current.style.transition = 'stroke-dashoffset 1s ease-out'
+        pathRef.current.style.strokeDashoffset = '0'
+      })
     })
   }, [])
 
