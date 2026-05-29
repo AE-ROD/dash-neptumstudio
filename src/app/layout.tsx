@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Nunito, DM_Sans } from 'next/font/google'
+import { Nunito, DM_Sans, Cormorant_Garamond } from 'next/font/google'
 import { PanelProvider } from '@/context/PanelContext'
 import './globals.css'
 
@@ -15,6 +15,13 @@ const dmSans = DM_Sans({
   weight: ['400', '500', '600'],
 })
 
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  variable: '--font-cormorant',
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+})
+
 export const metadata: Metadata = {
   title: 'NeptumStudio Panel',
   description: 'Panel de control de NeptumStudio',
@@ -22,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${nunito.variable} ${dmSans.variable}`}>
+    <html lang="es" className={`${nunito.variable} ${dmSans.variable} ${cormorant.variable}`}>
       <body><PanelProvider>{children}</PanelProvider></body>
     </html>
   )
