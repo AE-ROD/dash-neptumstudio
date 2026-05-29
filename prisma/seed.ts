@@ -5,6 +5,16 @@ import { PrismaClient } from '../src/app/generated/prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
+  // Limpiar datos existentes antes de sembrar
+  await prisma.revenue.deleteMany()
+  await prisma.instagramSnapshot.deleteMany()
+  await prisma.pending.deleteMany()
+  await prisma.note.deleteMany()
+  await prisma.idea.deleteMany()
+  await prisma.proposal.deleteMany()
+  await prisma.client.deleteMany()
+  await prisma.project.deleteMany()
+
   await prisma.project.createMany({
     data: [
       {

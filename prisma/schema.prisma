@@ -39,8 +39,12 @@ model Proposal {
   notas          String?
   proyectoId     String?
   proyecto       Project?       @relation(fields: [proyectoId], references: [id])
+  ingresos       Revenue[]
   creadoEn       DateTime       @default(now())
   actualizadoEn  DateTime       @updatedAt
+
+  @@index([estado])
+  @@index([clienteId])
 }
 
 model Client {
@@ -63,6 +67,8 @@ model Pending {
   estaSemana  Boolean   @default(true)
   fuente      String    @default("panel")
   creadoEn    DateTime  @default(now())
+
+  @@index([completado, estaSemana])
 }
 
 model Idea {
@@ -77,6 +83,9 @@ model Idea {
   proyecto           Project?     @relation("ProyectoIdeas", fields: [proyectoId], references: [id])
   creadoEn           DateTime     @default(now())
   actualizadoEn      DateTime     @updatedAt
+
+  @@index([estado, etiqueta])
+  @@index([proyectoId])
 }
 
 model Note {
@@ -85,6 +94,8 @@ model Note {
   proyectoId String
   proyecto   Project  @relation(fields: [proyectoId], references: [id])
   creadoEn   DateTime @default(now())
+
+  @@index([proyectoId])
 }
 
 model InstagramSnapshot {
@@ -97,13 +108,14 @@ model InstagramSnapshot {
 }
 
 model Revenue {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   monto       Float
   descripcion String?
   mes         Int
   anio        Int
   propuestaId String?
-  creadoEn    DateTime @default(now())
+  propuesta   Proposal? @relation(fields: [propuestaId], references: [id])
+  creadoEn    DateTime  @default(now())
 }
 
 enum ProjectEstado {
