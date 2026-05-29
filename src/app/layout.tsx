@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Nunito, DM_Sans } from 'next/font/google'
+import { PanelProvider } from '@/context/PanelContext'
 import './globals.css'
 
 const nunito = Nunito({
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${nunito.variable} ${dmSans.variable}`}>
-      <body>{children}</body>
+      <body><PanelProvider>{children}</PanelProvider></body>
     </html>
   )
 }
