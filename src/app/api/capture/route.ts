@@ -1,3 +1,4 @@
+// TODO: Agregar autenticación NextAuth antes de producción
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { clasificarCaptura } from '@/lib/groq'
@@ -6,6 +7,10 @@ import type { TipoCaptura } from '@/lib/groq'
 export async function POST(req: Request) {
   try {
     const { texto, tipoForzado }: { texto: string; tipoForzado?: TipoCaptura } = await req.json()
+
+    if (!texto || typeof texto !== 'string') {
+      return NextResponse.json({ error: 'texto es requerido' }, { status: 400 })
+    }
 
     const tipo = tipoForzado ?? (await clasificarCaptura(texto))
 
