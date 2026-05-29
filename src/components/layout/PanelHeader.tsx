@@ -33,7 +33,6 @@ export function PanelHeader() {
 
   return (
     <motion.header
-      style={{ background: gradiente }}
       animate={{ background: gradiente }}
       transition={{ duration: 0.7, ease: 'easeInOut' }}
       className="h-[76px] flex items-center px-9 gap-4 flex-shrink-0 relative z-10"
@@ -48,7 +47,7 @@ export function PanelHeader() {
           <span style={{ color: '#E63B2E' }}>.</span>
         </span>
         <span
-          style={{ color: colores.texto }}
+          style={{ color: colores.texto, fontFamily: 'var(--font-dm-sans)' }}
           className="text-[10px] font-semibold uppercase tracking-widest opacity-70"
         >
           panel de control
