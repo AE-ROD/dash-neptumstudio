@@ -30,6 +30,8 @@ export function SueltaloWidget() {
       setTipoSeleccionado(null)
       setGuardado(true)
       setTimeout(() => setGuardado(false), 2000)
+      // Notifica a IdeasWidget para recargar
+      window.dispatchEvent(new Event('captura-guardada'))
     } catch {
       // Silently fail — usuario puede reintentar
     } finally {

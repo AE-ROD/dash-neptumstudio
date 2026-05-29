@@ -32,6 +32,7 @@ export function DrawerBase({ estaAbierto, titulo, children }: DrawerBaseProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            style={{ willChange: 'transform' }}
             className="fixed right-0 top-0 h-full w-[440px] bg-white z-50 flex flex-col shadow-2xl"
           >
             {/* Header */}

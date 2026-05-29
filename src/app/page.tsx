@@ -12,6 +12,7 @@ import { PipelineListWidget }       from '@/components/widgets/PipelineListWidge
 import { PendientesWidget }         from '@/components/widgets/PendientesWidget'
 import { InstagramWidget }          from '@/components/widgets/InstagramWidget'
 import { SueltaloWidget }           from '@/components/widgets/SueltaloWidget'
+import { IdeasWidget }              from '@/components/widgets/IdeasWidget'
 import { ProyectoDrawer }           from '@/components/drawers/ProyectoDrawer'
 import { PendientesDrawer }         from '@/components/drawers/PendientesDrawer'
 import { InstagramDrawer }          from '@/components/drawers/InstagramDrawer'
@@ -70,11 +71,12 @@ export default function PaginaPanel() {
 
           {filas.includes('dia') && (
             <motion.div key="dia" {...fade}
-              className="grid grid-cols-3 gap-3"
+              className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-3"
             >
               <PendientesWidget />
               <InstagramWidget />
               <SueltaloWidget />
+              <IdeasWidget />
             </motion.div>
           )}
 
