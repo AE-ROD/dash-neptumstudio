@@ -294,126 +294,110 @@ export function CotizacionModal() {
             <motion.div key="preview"
               initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 8 }}
               transition={{ duration: 0.15 }}
-              className="bg-[#EDECEA] p-5"
+              className="bg-[#EDECEA] p-4"
             >
-              <div className="bg-white rounded-2xl overflow-hidden shadow-md border border-[#E0DDD8]"
+              <div className="bg-white rounded-xl overflow-hidden shadow-md border border-[#E0DDD8]"
                 style={{ fontFamily: 'var(--font-dm-sans)' }}>
 
-                {/* ── CABECERA: azul navy completo ── */}
-                <div className="bg-[#0D1B2A] px-8 pt-7 pb-6">
-                  <div className="flex items-start justify-between">
-
-                    {/* Logo + nombre */}
-                    <div className="flex items-center gap-3">
-                      <TridentIcon size={36} color="#F6F4F0" />
-                      <div>
-                        <div className="text-[#F6F4F0] text-[16px] tracking-[0.25em] font-medium uppercase"
-                          style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                          neptumstudio
-                        </div>
-                        <div className="text-[#A7ADBA] text-[8.5px] tracking-[0.18em] uppercase mt-1"
-                          style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                          Desarrollamos soluciones digitales
-                        </div>
+                {/* ── CABECERA navy ── */}
+                <div className="bg-[#0D1B2A] px-7 pt-5 pb-4 flex items-center justify-between">
+                  {/* Logo + nombre */}
+                  <div className="flex items-center gap-2.5">
+                    <TridentIcon size={30} color="#F6F4F0" />
+                    <div>
+                      <div className="text-[#F6F4F0] text-[13px] tracking-[0.25em] font-medium uppercase"
+                        style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                        neptumstudio
                       </div>
-                    </div>
-
-                    {/* Título "Cotización" enorme */}
-                    <div className="text-right">
-                      <div className="text-[#F6F4F0] font-light leading-none"
-                        style={{ fontFamily: 'var(--font-cormorant)', fontSize: '46px', letterSpacing: '-0.01em' }}>
-                        Cotización
-                      </div>
-                      <div className="text-[#A7ADBA] text-[11px] font-mono mt-1.5 tracking-widest">
-                        {numeroCot}
+                      <div className="text-[#A7ADBA] text-[8px] tracking-[0.16em] uppercase mt-0.5"
+                        style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                        Soluciones digitales
                       </div>
                     </div>
                   </div>
 
-                  {/* Línea divisora sutil */}
-                  <div className="mt-5 border-t border-white/10" />
+                  {/* Título + número */}
+                  <div className="text-right">
+                    <div className="text-[#F6F4F0] font-light leading-none"
+                      style={{ fontFamily: 'var(--font-cormorant)', fontSize: '40px', letterSpacing: '-0.01em' }}>
+                      Cotización
+                    </div>
+                    <div className="text-[#A7ADBA] text-[10px] mt-1 tracking-widest"
+                      style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                      {numeroCot}
+                    </div>
+                  </div>
                 </div>
 
-                {/* ── SECCIÓN DE 3 COLUMNAS: Remitente · Para · Detalles ── */}
+                {/* ── 3 COLUMNAS: Remitente · Para · Detalles ── */}
                 <div className="grid grid-cols-3 divide-x divide-[#F0EDE8] border-b border-[#F0EDE8]">
 
                   {/* Col 1 — Remitente */}
-                  <div className="px-6 py-5">
-                    <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-3"
+                  <div className="px-5 py-4">
+                    <div className="text-[8px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-2.5"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
                       Remitente
                     </div>
-                    <div className="text-[15px] font-medium text-[#0D1B2A] mb-2"
-                      style={{ fontFamily: 'var(--font-cormorant)', lineHeight: 1.2 }}>
+                    <div className="text-[14px] font-medium text-[#0D1B2A] mb-2"
+                      style={{ fontFamily: 'var(--font-cormorant)', lineHeight: 1.1 }}>
                       NeptumStudio
                     </div>
-                    <div className="flex flex-col gap-1">
-                      {[
-                        { icon: '✉', val: NEPTUM.email },
-                        { icon: '🌐', val: NEPTUM.web },
-                        { icon: '📞', val: NEPTUM.telefono },
-                        { icon: '📍', val: NEPTUM.pais },
-                      ].map(row => (
-                        <div key={row.val} className="flex items-center gap-1.5">
-                          <span className="text-[9px] opacity-40">{row.icon}</span>
-                          <span className="text-[10px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                            {row.val}
-                          </span>
-                        </div>
+                    <div className="flex flex-col gap-0.5">
+                      {[NEPTUM.email, NEPTUM.web, NEPTUM.telefono, NEPTUM.pais].map(val => (
+                        <span key={val} className="text-[10px] text-[#415466]"
+                          style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                          {val}
+                        </span>
                       ))}
                     </div>
                   </div>
 
                   {/* Col 2 — Para (cliente) */}
-                  <div className="px-6 py-5">
-                    <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-3"
+                  <div className="px-5 py-4">
+                    <div className="text-[8px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-2.5"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
                       Para
                     </div>
-                    <div className="text-[15px] font-medium text-[#0D1B2A] mb-2"
-                      style={{ fontFamily: 'var(--font-cormorant)', lineHeight: 1.2 }}>
+                    <div className="text-[14px] font-medium text-[#0D1B2A] mb-2"
+                      style={{ fontFamily: 'var(--font-cormorant)', lineHeight: 1.1 }}>
                       {nombreCliente || <span className="text-[#C5CBD6]">—</span>}
                     </div>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-0.5">
                       {contactoData?.marca && (
-                        <div className="text-[10px] text-[#415466]">{contactoData.marca}</div>
+                        <span className="text-[10px] text-[#415466]">{contactoData.marca}</span>
                       )}
                       {contactoData?.email && (
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[9px] opacity-40">✉</span>
-                          <span className="text-[10px] text-[#415466]">{contactoData.email}</span>
-                        </div>
+                        <span className="text-[10px] text-[#415466]">{contactoData.email}</span>
                       )}
                       {contactoData?.telefono && (
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[9px] opacity-40">📞</span>
-                          <span className="text-[10px] text-[#415466]">{contactoData.telefono}</span>
-                        </div>
+                        <span className="text-[10px] text-[#415466]">{contactoData.telefono}</span>
                       )}
                     </div>
                   </div>
 
-                  {/* Col 3 — Detalles del documento */}
-                  <div className="px-6 py-5">
-                    <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-3"
+                  {/* Col 3 — Detalles */}
+                  <div className="px-5 py-4">
+                    <div className="text-[8px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-2.5"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
                       Detalles
                     </div>
-                    <div className="flex flex-col gap-2.5">
+                    <div className="flex flex-col gap-2">
                       {[
-                        { label: 'Número',       value: numeroCot },
-                        { label: 'Emisión',       value: fmtFecha(fechaEmision) },
-                        { label: 'Válido hasta',  value: fmtFecha(fechaValidez) },
-                        { label: 'Estado',        value: LABEL_ESTADO[estado], color: COLOR_ESTADO[estado] },
-                        { label: 'Forma de pago', value: 'Transferencia bancaria' },
+                        { label: 'N°',           value: numeroCot,               mono: true  },
+                        { label: 'Emisión',      value: fmtFecha(fechaEmision),  mono: false },
+                        { label: 'Válido hasta', value: fmtFecha(fechaValidez),  mono: false },
+                        { label: 'Estado',       value: LABEL_ESTADO[estado],    mono: false, color: COLOR_ESTADO[estado] },
                       ].map(row => (
                         <div key={row.label}>
-                          <div className="text-[8px] font-bold text-[#C5CBD6] uppercase tracking-widest"
+                          <div className="text-[7.5px] font-bold text-[#C5CBD6] uppercase tracking-widest"
                             style={{ fontFamily: 'var(--font-dm-sans)' }}>
                             {row.label}
                           </div>
-                          <div className="text-[11px] font-medium mt-0.5"
-                            style={{ fontFamily: 'var(--font-dm-sans)', color: row.color ?? '#0D1B2A' }}>
+                          <div className="text-[10.5px] font-medium mt-0.5"
+                            style={{
+                              fontFamily: row.mono ? 'var(--font-dm-mono)' : 'var(--font-dm-sans)',
+                              color: row.color ?? '#0D1B2A',
+                            }}>
                             {row.value}
                           </div>
                         </div>
@@ -423,22 +407,17 @@ export function CotizacionModal() {
                 </div>
 
                 {/* ── TABLA DE SERVICIOS ── */}
-                <div className="px-8 py-6">
-                  <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-4"
-                    style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                    Servicios contratados
-                  </div>
-
-                  {/* Cabecera */}
-                  <div className="grid grid-cols-[1fr_52px_88px_88px] gap-3 pb-2.5 border-b-2 border-[#0D1B2A]">
+                <div className="px-7 py-4">
+                  {/* Cabecera tabla */}
+                  <div className="grid grid-cols-[1fr_44px_80px_80px] gap-3 pb-2 border-b-2 border-[#0D1B2A]">
                     {[
-                      { label: 'Descripción',  align: 'left'  },
-                      { label: 'Cant.',         align: 'center'},
-                      { label: 'Precio unit.',  align: 'right' },
-                      { label: 'Subtotal',      align: 'right' },
+                      { label: 'Descripción', align: 'left'   },
+                      { label: 'Cant.',        align: 'center' },
+                      { label: 'P. unitario',  align: 'right'  },
+                      { label: 'Subtotal',     align: 'right'  },
                     ].map(h => (
                       <span key={h.label}
-                        className="text-[9px] font-bold text-[#0D1B2A] uppercase tracking-wider"
+                        className="text-[8.5px] font-bold text-[#0D1B2A] uppercase tracking-wider"
                         style={{ fontFamily: 'var(--font-dm-sans)', textAlign: h.align as 'left' | 'center' | 'right' }}>
                         {h.label}
                       </span>
@@ -448,55 +427,54 @@ export function CotizacionModal() {
                   {/* Filas */}
                   {itemsFiltrados.length > 0 ? itemsFiltrados.map((item, idx) => (
                     <div key={idx}
-                      className="grid grid-cols-[1fr_52px_88px_88px] gap-3 py-3 border-b border-[#F5F2EE] items-baseline"
+                      className="grid grid-cols-[1fr_44px_80px_80px] gap-3 py-2 border-b border-[#F5F2EE] items-baseline"
                       style={{ background: idx % 2 === 0 ? 'white' : '#FAFAF8' }}>
-                      <span className="text-[12px] text-[#0D1B2A]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                      <span className="text-[11.5px] text-[#0D1B2A]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                         {item.descripcion}
                       </span>
-                      <span className="text-[12px] text-[#415466] text-center" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                      <span className="text-[11px] text-[#415466] text-center"
+                        style={{ fontFamily: 'var(--font-dm-mono)' }}>
                         {item.cantidad}
                       </span>
-                      <span className="text-[12px] text-[#415466] text-right" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                      <span className="text-[11px] text-[#415466] text-right"
+                        style={{ fontFamily: 'var(--font-dm-mono)' }}>
                         ${Number(item.precioUnit).toLocaleString('es-CL')}
                       </span>
-                      <span className="text-[12px] font-semibold text-[#0D1B2A] text-right"
-                        style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                      <span className="text-[11px] font-medium text-[#0D1B2A] text-right"
+                        style={{ fontFamily: 'var(--font-dm-mono)' }}>
                         ${(Number(item.cantidad) * Number(item.precioUnit)).toLocaleString('es-CL')}
                       </span>
                     </div>
                   )) : (
-                    <div className="py-5 text-center text-[11px] text-[#C5CBD6]"
+                    <div className="py-4 text-center text-[11px] text-[#C5CBD6]"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
                       Sin servicios agregados
                     </div>
                   )}
 
-                  {/* Subtotal + Total */}
-                  <div className="mt-4 flex justify-end">
-                    <div className="w-56">
-                      <div className="flex justify-between py-2 border-b border-[#F0EDE8]">
-                        <span className="text-[11px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                          Subtotal
-                        </span>
-                        <span className="text-[11px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                          ${total.toLocaleString('es-CL')}
-                        </span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-[#F0EDE8]">
-                        <span className="text-[11px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                          IVA (19%)
-                        </span>
-                        <span className="text-[11px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                          ${Math.round(total * 0.19).toLocaleString('es-CL')}
-                        </span>
-                      </div>
-                      <div className="flex justify-between pt-3 items-baseline">
-                        <span className="text-[10px] font-bold text-[#0D1B2A] uppercase tracking-widest"
+                  {/* Totales */}
+                  <div className="mt-3 flex justify-end">
+                    <div className="w-52">
+                      {[
+                        { label: 'Subtotal', value: `$${total.toLocaleString('es-CL')}`,                    muted: true  },
+                        { label: 'IVA 19%',  value: `$${Math.round(total * 0.19).toLocaleString('es-CL')}`, muted: true  },
+                      ].map(row => (
+                        <div key={row.label} className="flex justify-between py-1.5 border-b border-[#F0EDE8]">
+                          <span className="text-[10px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                            {row.label}
+                          </span>
+                          <span className="text-[10px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                            {row.value}
+                          </span>
+                        </div>
+                      ))}
+                      <div className="flex justify-between pt-2.5 items-baseline">
+                        <span className="text-[9px] font-bold text-[#0D1B2A] uppercase tracking-widest"
                           style={{ fontFamily: 'var(--font-dm-sans)' }}>
                           Total
                         </span>
-                        <span className="font-light text-[30px] text-[#0D1B2A] leading-none"
-                          style={{ fontFamily: 'var(--font-cormorant)' }}>
+                        <span className="text-[22px] font-light text-[#0D1B2A] leading-none"
+                          style={{ fontFamily: 'var(--font-dm-mono)' }}>
                           ${Math.round(total * 1.19).toLocaleString('es-CL')}
                         </span>
                       </div>
@@ -504,15 +482,15 @@ export function CotizacionModal() {
                   </div>
                 </div>
 
-                {/* ── NOTAS ── */}
+                {/* ── NOTAS (sólo si hay) ── */}
                 {notas && (
-                  <div className="px-8 pb-6">
-                    <div className="bg-[#F8F7F4] rounded-xl px-5 py-4 border-l-[3px] border-[#18263B]">
-                      <div className="text-[8.5px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-1.5"
+                  <div className="px-7 pb-4">
+                    <div className="bg-[#F8F7F4] rounded-lg px-4 py-3 border-l-[3px] border-[#18263B]">
+                      <div className="text-[8px] font-bold text-[#A7ADBA] uppercase tracking-[0.15em] mb-1"
                         style={{ fontFamily: 'var(--font-dm-sans)' }}>
                         Notas y condiciones
                       </div>
-                      <p className="text-[11px] text-[#415466] leading-relaxed"
+                      <p className="text-[10.5px] text-[#415466] leading-relaxed"
                         style={{ fontFamily: 'var(--font-dm-sans)' }}>
                         {notas}
                       </p>
@@ -521,15 +499,18 @@ export function CotizacionModal() {
                 )}
 
                 {/* ── FOOTER ── */}
-                <div className="bg-[#0D1B2A] px-8 py-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <TridentIcon size={13} color="#415466" />
-                    <span className="text-[8.5px] text-[#415466] tracking-[0.15em] uppercase"
+                <div className="bg-[#0D1B2A] px-7 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <TridentIcon size={12} color="#415466" />
+                    <span className="text-[8px] text-[#415466] tracking-[0.12em] uppercase"
                       style={{ fontFamily: 'var(--font-dm-sans)' }}>
-                      neptumstudio · {NEPTUM.email} · {NEPTUM.web}
+                      {NEPTUM.email} · {NEPTUM.web}
                     </span>
                   </div>
-                  <span className="text-[9px] text-[#415466] font-mono">{numeroCot}</span>
+                  <span className="text-[8.5px] text-[#415466]"
+                    style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                    {numeroCot}
+                  </span>
                 </div>
               </div>
             </motion.div>
