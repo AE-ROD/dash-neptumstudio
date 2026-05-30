@@ -10,14 +10,14 @@ import { InstagramStatWidget }      from '@/components/widgets/InstagramStatWidg
 import { ProyectosListWidget }      from '@/components/widgets/ProyectosListWidget'
 import { PipelineListWidget }       from '@/components/widgets/PipelineListWidget'
 import { PendientesWidget }         from '@/components/widgets/PendientesWidget'
-import { InstagramWidget }          from '@/components/widgets/InstagramWidget'
+import { CalendarioWidget }         from '@/components/widgets/CalendarioWidget'
 import { SueltaloWidget }           from '@/components/widgets/SueltaloWidget'
 import { IdeasWidget }              from '@/components/widgets/IdeasWidget'
 import { ContactosWidget }          from '@/components/widgets/ContactosWidget'
 import { CotizacionesWidget }       from '@/components/widgets/CotizacionesWidget'
 import { ProyectoDrawer }           from '@/components/drawers/ProyectoDrawer'
 import { PendientesDrawer }         from '@/components/drawers/PendientesDrawer'
-import { InstagramDrawer }          from '@/components/drawers/InstagramDrawer'
+import { CalendarioDrawer }         from '@/components/drawers/CalendarioDrawer'
 import { PropuestaModal }           from '@/components/modals/PropuestaModal'
 import { IdeaModal }                from '@/components/modals/IdeaModal'
 import { CotizacionModal }          from '@/components/modals/CotizacionModal'
@@ -87,7 +87,7 @@ export default function PaginaPanel() {
               className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-3"
             >
               <PendientesWidget />
-              <InstagramWidget />
+              <CalendarioWidget />
               <SueltaloWidget />
               <IdeasWidget />
             </motion.div>
@@ -111,7 +111,7 @@ export default function PaginaPanel() {
       {/* Overlays */}
       <ProyectoDrawer />
       <PendientesDrawer />
-      <InstagramDrawer />
+      <CalendarioDrawer />
       <PropuestaModal />
       <IdeaModal />
       <CotizacionModal />

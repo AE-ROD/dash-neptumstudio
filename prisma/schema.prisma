@@ -177,3 +177,23 @@ enum IdeaEstado {
   COMPLETADA
   DESCARTADA
 }
+
+model Evento {
+  id          String     @id @default(cuid())
+  titulo      String
+  fecha       DateTime
+  hora        String?    // "HH:MM" — simple string, sin timezone headaches
+  tipo        EventoTipo @default(REUNION)
+  clienteId   String?
+  descripcion String?
+  creadoEn    DateTime   @default(now())
+
+  @@index([fecha])
+}
+
+enum EventoTipo {
+  REUNION
+  LLAMADA
+  ENTREGA
+  OTRO
+}

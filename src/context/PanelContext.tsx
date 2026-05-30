@@ -1,7 +1,7 @@
 'use client'
 import { createContext, useContext, useState, ReactNode } from 'react'
 
-export type TipoDrawer     = 'proyecto' | 'pendientes' | 'instagram' | null
+export type TipoDrawer     = 'proyecto' | 'pendientes' | 'instagram' | 'calendario' | null
 export type TipoModal      = 'propuesta' | 'cliente' | 'idea' | 'cotizacion' | null
 export type SeccionActiva  = 'inicio' | 'proyectos' | 'clientes' | 'pipeline' | 'ingresos' | 'pendientes' | 'instagram' | 'cotizaciones' | 'contacto'
 

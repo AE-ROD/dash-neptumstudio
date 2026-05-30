@@ -80,6 +80,19 @@ export interface CotizacionItem {
   precioUnit: number
 }
 
+export type EventoTipo = 'REUNION' | 'LLAMADA' | 'ENTREGA' | 'OTRO'
+
+export interface Evento {
+  id: string
+  titulo: string
+  fecha: string   // ISO string
+  hora: string | null
+  tipo: EventoTipo
+  clienteId: string | null
+  descripcion: string | null
+  creadoEn: string
+}
+
 export interface Cotizacion {
   id: string
   nombreCliente: string
