@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Nunito, DM_Sans, DM_Mono, Cormorant_Garamond } from 'next/font/google'
+import { Nunito, DM_Sans, Outfit, Cormorant_Garamond } from 'next/font/google'
 import { PanelProvider } from '@/context/PanelContext'
 import './globals.css'
 
@@ -15,11 +15,10 @@ const dmSans = DM_Sans({
   weight: ['400', '500', '600'],
 })
 
-const dmMono = DM_Mono({
+const outfit = Outfit({
   subsets: ['latin'],
-  variable: '--font-dm-mono',
-  weight: ['300', '400', '500'],
-  style: ['normal', 'italic'],
+  variable: '--font-outfit',
+  weight: ['300', '400', '500', '600'],
 })
 
 const cormorant = Cormorant_Garamond({
@@ -36,7 +35,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${nunito.variable} ${dmSans.variable} ${dmMono.variable} ${cormorant.variable}`}>
+    <html lang="es" className={`${nunito.variable} ${dmSans.variable} ${outfit.variable} ${cormorant.variable}`}>
       <body><PanelProvider>{children}</PanelProvider></body>
     </html>
   )

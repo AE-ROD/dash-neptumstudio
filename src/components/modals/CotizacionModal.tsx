@@ -323,7 +323,7 @@ export function CotizacionModal() {
                       Cotización
                     </div>
                     <div className="text-[#A7ADBA] text-[10px] mt-1 tracking-widest"
-                      style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                      style={{ fontFamily: 'var(--font-outfit)' }}>
                       {numeroCot}
                     </div>
                   </div>
@@ -395,7 +395,7 @@ export function CotizacionModal() {
                           </div>
                           <div className="text-[10.5px] font-medium mt-0.5"
                             style={{
-                              fontFamily: row.mono ? 'var(--font-dm-mono)' : 'var(--font-dm-sans)',
+                              fontFamily: row.mono ? 'var(--font-outfit)' : 'var(--font-dm-sans)',
                               color: row.color ?? '#0D1B2A',
                             }}>
                             {row.value}
@@ -433,15 +433,15 @@ export function CotizacionModal() {
                         {item.descripcion}
                       </span>
                       <span className="text-[11px] text-[#415466] text-center"
-                        style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                        style={{ fontFamily: 'var(--font-outfit)' }}>
                         {item.cantidad}
                       </span>
                       <span className="text-[11px] text-[#415466] text-right"
-                        style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                        style={{ fontFamily: 'var(--font-outfit)' }}>
                         ${Number(item.precioUnit).toLocaleString('es-CL')}
                       </span>
                       <span className="text-[11px] font-medium text-[#0D1B2A] text-right"
-                        style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                        style={{ fontFamily: 'var(--font-outfit)' }}>
                         ${(Number(item.cantidad) * Number(item.precioUnit)).toLocaleString('es-CL')}
                       </span>
                     </div>
@@ -463,7 +463,7 @@ export function CotizacionModal() {
                           <span className="text-[10px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
                             {row.label}
                           </span>
-                          <span className="text-[10px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                          <span className="text-[10px] text-[#415466]" style={{ fontFamily: 'var(--font-outfit)' }}>
                             {row.value}
                           </span>
                         </div>
@@ -474,7 +474,7 @@ export function CotizacionModal() {
                           Total
                         </span>
                         <span className="text-[22px] font-light text-[#0D1B2A] leading-none"
-                          style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                          style={{ fontFamily: 'var(--font-outfit)' }}>
                           ${Math.round(total * 1.19).toLocaleString('es-CL')}
                         </span>
                       </div>
@@ -508,7 +508,7 @@ export function CotizacionModal() {
                     </span>
                   </div>
                   <span className="text-[8.5px] text-[#415466]"
-                    style={{ fontFamily: 'var(--font-dm-mono)' }}>
+                    style={{ fontFamily: 'var(--font-outfit)' }}>
                     {numeroCot}
                   </span>
                 </div>
