@@ -4,6 +4,14 @@ import { prisma } from '@/lib/prisma'
 import { clasificarCaptura } from '@/lib/groq'
 import type { TipoCaptura } from '@/lib/groq'
 
+// Mapeo tipo captura → etiqueta Idea (todo pasa por el widget Capturado)
+const TIPO_A_ETIQUETA = {
+  IDEA:    'IDEA',
+  MEJORA:  'MEJORA',
+  TAREA:   'TAREA',
+  CLIENTE: 'OPORTUNIDAD',
+} as const
+
 export async function POST(req: Request) {
   try {
     const { texto, tipoForzado }: { texto: string; tipoForzado?: TipoCaptura } = await req.json()
@@ -13,22 +21,20 @@ export async function POST(req: Request) {
     }
 
     const tipo = tipoForzado ?? (await clasificarCaptura(texto))
+    const etiqueta = TIPO_A_ETIQUETA[tipo] ?? 'IDEA'
 
+    // Siempre se guarda en Ideas → aparece en "Capturado"
+    const idea = await prisma.idea.create({ data: { texto, etiqueta, fuente: 'panel' } })
+
+    // Además, rutar al modelo correspondiente según tipo
     if (tipo === 'TAREA') {
-      const pendiente = await prisma.pending.create({ data: { texto, fuente: 'panel' } })
-      return NextResponse.json({ tipo, resultado: pendiente })
+      await prisma.pending.create({ data: { texto, fuente: 'panel' } })
     }
 
     if (tipo === 'CLIENTE') {
-      const propuesta = await prisma.proposal.create({
-        data: { nombreCliente: texto, estado: 'LEAD' },
-      })
-      return NextResponse.json({ tipo, resultado: propuesta })
+      await prisma.proposal.create({ data: { nombreCliente: texto, estado: 'LEAD' } })
     }
 
-    // IDEA o MEJORA
-    const etiqueta = tipo === 'MEJORA' ? ('MEJORA' as const) : ('IDEA' as const)
-    const idea = await prisma.idea.create({ data: { texto, etiqueta, fuente: 'panel' } })
     return NextResponse.json({ tipo, resultado: idea })
   } catch (error) {
     console.error('[api/capture] POST error:', error)

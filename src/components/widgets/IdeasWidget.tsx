@@ -25,12 +25,12 @@ export function IdeasWidget() {
     >
       <div className="flex items-center justify-between">
         <span
-          className="font-black text-[13px] text-[#111] tracking-tight"
+          className="font-black text-[15px] text-[#111] tracking-tight"
           style={{ fontFamily: 'var(--font-nunito)' }}
         >
           Capturado
         </span>
-        <span className="text-[10px] text-[#bbb] font-bold tabular-nums">
+        <span className="text-[12px] text-[#bbb] font-bold tabular-nums">
           {ideas.length}
         </span>
       </div>
@@ -38,11 +38,11 @@ export function IdeasWidget() {
       <div className="flex flex-col gap-0 overflow-hidden">
         <AnimatePresence initial={false}>
           {cargando ? (
-            <span className="text-[#bbb] text-[11px] py-2">Cargando...</span>
+            <span className="text-[#bbb] text-[13px] py-2">Cargando...</span>
           ) : ideas.length === 0 ? (
-            <span className="text-[#bbb] text-[11px] py-2">Nada capturado aún</span>
+            <span className="text-[#bbb] text-[13px] py-2">Nada capturado aún</span>
           ) : (
-            ideas.slice(0, 6).map((idea) => {
+            ideas.slice(0, 10).map((idea) => {
               const chip = CHIP_COLORES[idea.etiqueta] ?? CHIP_COLORES.IDEA
               return (
                 <motion.div
@@ -51,15 +51,15 @@ export function IdeasWidget() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   style={{ overflow: 'hidden' }}
-                  className="flex items-start gap-2 py-1.5 border-b border-[#F5F5F3] last:border-0"
+                  className="flex items-start gap-2 py-2 border-b border-[#F5F5F3] last:border-0"
                 >
                   <span
                     style={{ background: chip.bg, color: chip.text }}
-                    className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-full flex-shrink-0 mt-0.5"
+                    className="text-[11px] font-extrabold px-2 py-0.5 rounded-full flex-shrink-0 mt-0.5"
                   >
                     {EMOJI_ETIQUETA[idea.etiqueta]} {idea.etiqueta}
                   </span>
-                  <span className="text-[11px] text-[#333] leading-snug line-clamp-2">
+                  <span className="text-[13px] text-[#333] leading-snug line-clamp-2">
                     {idea.texto}
                   </span>
                 </motion.div>
