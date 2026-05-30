@@ -14,7 +14,7 @@ export function IngresosPageWidget() {
 
   const mesActual  = ingresos?.mes   ?? new Date().getMonth() + 1
   const anioActual = ingresos?.anio  ?? new Date().getFullYear()
-  const total      = ingresos?.total ?? 0
+  const total      = ingresos?.balance ?? 0
 
   async function guardarIngreso() {
     if (!nuevo) return

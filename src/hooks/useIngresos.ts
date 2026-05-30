@@ -1,17 +1,31 @@
 'use client'
-import { useState, useEffect } from 'react'
-import type { IngresosMes } from '@/types/panel'
+import { useState, useEffect, useCallback } from 'react'
+import type { Balance } from '@/types/panel'
 
 export function useIngresos() {
-  const [ingresos, setIngresos] = useState<IngresosMes | null>(null)
+  const [balance,  setBalance]  = useState<Balance | null>(null)
   const [cargando, setCargando] = useState(true)
 
-  useEffect(() => {
-    fetch('/api/revenue')
-      .then(r => r.ok ? r.json() : null)
-      .then(setIngresos)
-      .finally(() => setCargando(false))
+  const cargar = useCallback(async () => {
+    setCargando(true)
+    try {
+      const res = await fetch('/api/revenue')
+      const data = res.ok ? await res.json() : null
+      setBalance(data)
+    } finally { setCargando(false) }
   }, [])
 
-  return { ingresos, cargando }
+  useEffect(() => { cargar() }, [cargar])
+
+  async function registrar(monto: number, tipo: 'INGRESO' | 'EGRESO', descripcion?: string) {
+    await fetch('/api/revenue', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ monto, tipo, descripcion }),
+    })
+    await cargar()
+  }
+
+  // Alias legacy: expone `ingresos` para componentes que no migré aún
+  return { balance, ingresos: balance, cargando, registrar, recargar: cargar }
 }

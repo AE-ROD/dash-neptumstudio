@@ -12,7 +12,7 @@ const PILLS_NAV: { id: SeccionActiva; etiqueta: string; tieneActividad: boolean 
   { id: 'pipeline',      etiqueta: 'Pipeline',      tieneActividad: false },
   { id: 'cotizaciones',  etiqueta: 'Cotizaciones',  tieneActividad: false },
   { id: 'contacto',      etiqueta: 'Contacto',      tieneActividad: false },
-  { id: 'ingresos',      etiqueta: 'Ingresos',      tieneActividad: false },
+  { id: 'balance',       etiqueta: 'Balance',       tieneActividad: false },
   { id: 'pendientes',    etiqueta: 'Pendientes',    tieneActividad: false },
   { id: 'instagram',     etiqueta: 'Instagram',     tieneActividad: false },
 ]

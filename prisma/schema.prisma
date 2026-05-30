@@ -129,6 +129,7 @@ model InstagramSnapshot {
 model Revenue {
   id          String    @id @default(cuid())
   monto       Float
+  tipo        String    @default("INGRESO")   // "INGRESO" | "EGRESO"
   descripcion String?
   mes         Int
   anio        Int

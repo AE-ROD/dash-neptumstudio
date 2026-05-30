@@ -2,18 +2,15 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useIngresos } from '@/hooks/useIngresos'
-import { Sparkline } from '@/components/ui/Sparkline'
-
-const PUNTOS_DEMO = [2800, 3100, 2900, 3800, 3500, 4200]
 
 function useContadorAnimado(objetivo: number, duracion = 1000) {
   const [valor, setValor] = useState(0)
   useEffect(() => {
     if (!objetivo) return
-    const inicio    = performance.now()
-    const animar    = (ahora: number) => {
+    const inicio = performance.now()
+    const animar = (ahora: number) => {
       const progreso = Math.min((ahora - inicio) / duracion, 1)
-      const ease     = 1 - Math.pow(1 - progreso, 3) // ease-out cubic
+      const ease     = 1 - Math.pow(1 - progreso, 3)
       setValor(Math.floor(ease * objetivo))
       if (progreso < 1) requestAnimationFrame(animar)
     }
@@ -23,36 +20,44 @@ function useContadorAnimado(objetivo: number, duracion = 1000) {
 }
 
 export function IngresosHeroWidget() {
-  const { ingresos, cargando } = useIngresos()
-  const totalAnimado = useContadorAnimado(ingresos?.total ?? 0)
+  const { balance, cargando } = useIngresos()
+  const balanceAnimado = useContadorAnimado(balance?.balance ?? 0)
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="bg-[#111] rounded-2xl p-5 flex flex-col shadow-sm"
+      className="bg-[#0D1B2A] rounded-2xl p-5 flex flex-col shadow-sm"
     >
-      <span
-        className="text-[10px] font-bold uppercase tracking-widest text-[#555]"
-        style={{ fontFamily: 'var(--font-dm-sans)' }}
-      >
-        Ingresos del mes
+      <span className="text-[10px] font-bold uppercase tracking-widest text-[#415466]"
+        style={{ fontFamily: 'var(--font-dm-sans)' }}>
+        Balance del mes
       </span>
 
-      <span
-        className="text-[34px] font-black text-white leading-none tracking-tight mt-2"
-        style={{ fontFamily: 'var(--font-nunito)' }}
-      >
-        {cargando ? '—' : `$${totalAnimado.toLocaleString('es-CL')}`}
+      <span className="text-[34px] font-light text-white leading-none mt-2"
+        style={{ fontFamily: 'var(--font-cormorant)' }}>
+        {cargando ? '—' : `$${balanceAnimado.toLocaleString('es-CL')}`}
       </span>
 
-      <span className="mt-1.5 self-start bg-[#E63B2E] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
-        ↑ 12% este mes
-      </span>
-
-      <div className="mt-auto pt-3">
-        <Sparkline puntos={PUNTOS_DEMO} />
+      <div className="flex items-center gap-2 mt-2">
+        {balance && balance.ingresos > 0 && (
+          <span className="text-[9px] font-semibold text-[#1A7F4B] bg-[#EDFCF2] px-2 py-0.5 rounded-full"
+            style={{ fontFamily: 'var(--font-dm-sans)' }}>
+            +${balance.ingresos.toLocaleString('es-CL')} ing.
+          </span>
+        )}
+        {balance && balance.egresos > 0 && (
+          <span className="text-[9px] font-semibold text-[#C92A2A] bg-[#FFF1F0] px-2 py-0.5 rounded-full"
+            style={{ fontFamily: 'var(--font-dm-sans)' }}>
+            −${balance.egresos.toLocaleString('es-CL')} egr.
+          </span>
+        )}
+        {(!balance || (balance.ingresos === 0 && balance.egresos === 0)) && (
+          <span className="text-[9px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+            Recién empezando
+          </span>
+        )}
       </div>
     </motion.div>
   )

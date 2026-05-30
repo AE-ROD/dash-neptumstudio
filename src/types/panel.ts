@@ -56,11 +56,27 @@ export interface SnapshotIG {
   registradoEn: string
 }
 
-export interface IngresosMes {
-  total: number
+export interface RegistroBalance {
+  id: string
+  monto: number
+  tipo: 'INGRESO' | 'EGRESO'
+  descripcion: string | null
   mes: number
   anio: number
+  creadoEn: string
 }
+
+export interface Balance {
+  ingresos:  number
+  egresos:   number
+  balance:   number
+  mes:       number
+  anio:      number
+  registros: RegistroBalance[]
+}
+
+// Alias legacy para componentes que aún lo usan
+export type IngresosMes = Balance
 
 export interface Contacto {
   id: string

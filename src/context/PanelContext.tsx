@@ -3,7 +3,7 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 
 export type TipoDrawer     = 'proyecto' | 'pendientes' | 'instagram' | 'calendario' | null
 export type TipoModal      = 'propuesta' | 'cliente' | 'idea' | 'cotizacion' | null
-export type SeccionActiva  = 'inicio' | 'proyectos' | 'clientes' | 'pipeline' | 'ingresos' | 'pendientes' | 'instagram' | 'cotizaciones' | 'contacto'
+export type SeccionActiva  = 'inicio' | 'proyectos' | 'clientes' | 'pipeline' | 'balance' | 'pendientes' | 'instagram' | 'cotizaciones' | 'contacto'
 
 interface PanelContextValue {
   drawerAbierto:  TipoDrawer
