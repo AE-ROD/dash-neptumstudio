@@ -1,6 +1,7 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useIdeas } from '@/hooks/useIdeas'
+import { usePanelContext } from '@/context/PanelContext'
 
 const CHIP_COLORES: Record<string, { bg: string; text: string }> = {
   IDEA:        { bg: '#F0F0EE', text: '#555' },
@@ -15,6 +16,7 @@ const EMOJI_ETIQUETA: Record<string, string> = {
 
 export function IdeasWidget() {
   const { ideas, cargando } = useIdeas()
+  const { abrirModal } = usePanelContext()
 
   return (
     <motion.div
@@ -24,12 +26,13 @@ export function IdeasWidget() {
       className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-3 min-h-0"
     >
       <div className="flex items-center justify-between">
-        <span
-          className="font-black text-[15px] text-[#111] tracking-tight"
+        <button
+          onClick={() => abrirModal('idea')}
+          className="font-black text-[15px] text-[#111] tracking-tight hover:text-[#E63B2E] transition-colors text-left"
           style={{ fontFamily: 'var(--font-nunito)' }}
         >
           Capturado
-        </span>
+        </button>
         <span className="text-[12px] text-[#bbb] font-bold tabular-nums">
           {ideas.length}
         </span>
