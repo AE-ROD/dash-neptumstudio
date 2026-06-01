@@ -24,7 +24,6 @@ import { BalancePageWidget }          from '@/components/widgets/BalancePageWidg
 import { InstagramPageWidget }        from '@/components/widgets/InstagramPageWidget'
 // Overlays
 import { ProyectoDrawer }             from '@/components/drawers/ProyectoDrawer'
-import { PendientesDrawer }           from '@/components/drawers/PendientesDrawer'
 import { CalendarioDrawer }           from '@/components/drawers/CalendarioDrawer'
 import { PropuestaModal }             from '@/components/modals/PropuestaModal'
 import { IdeaModal }                  from '@/components/modals/IdeaModal'
@@ -133,7 +132,6 @@ export default function PaginaPanel() {
 
       {/* Overlays */}
       <ProyectoDrawer />
-      <PendientesDrawer />
       <CalendarioDrawer />
       <PropuestaModal />
       <IdeaModal />

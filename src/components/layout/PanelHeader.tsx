@@ -33,8 +33,7 @@ export function PanelHeader() {
 
   function manejarPill(id: SeccionActiva) {
     cambiarSeccion(id)
-    if (id === 'pendientes') abrirDrawer('pendientes')
-    if (id === 'instagram')  abrirDrawer('instagram')
+    if (id === 'instagram') abrirDrawer('instagram')
   }
 
   return (
