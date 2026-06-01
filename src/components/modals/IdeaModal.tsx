@@ -55,7 +55,7 @@ export function IdeaModal() {
       </div>
 
       {/* Cuerpo scrollable */}
-      <div className="px-6 py-5 overflow-y-auto flex flex-col gap-5">
+      <div className="flex-1 px-6 py-5 overflow-y-auto flex flex-col gap-5">
         {cargando ? (
           <p className="text-[13px] text-[#bbb]">Cargando...</p>
         ) : ideas.length === 0 ? (
