@@ -5,7 +5,7 @@ import { usePanelContext } from '@/context/PanelContext'
 
 export function PendientesWidget() {
   const { pendientes, cargando, toggleCompletado } = usePendientes()
-  const { abrirDrawer } = usePanelContext()
+  const { cambiarSeccion } = usePanelContext()
   const visibles = pendientes.slice(0, 4)
 
   return (
@@ -23,7 +23,7 @@ export function PendientesWidget() {
           Pendientes
         </span>
         <button
-          onClick={() => abrirDrawer('pendientes')}
+          onClick={() => cambiarSeccion('pendientes')}
           className="text-[11px] font-bold text-[#E63B2E]"
         >
           + Agregar
