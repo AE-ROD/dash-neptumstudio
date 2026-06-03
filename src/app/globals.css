@@ -1,18 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  --bg:       #EFEFED;
-  --surf:     #FFFFFF;
-  --text:     #111111;
-  --text-2:   #555555;
-  --dim:      #BBBBBB;
-  --border:   #F5F5F3;
+  /* ── Dark mode (default) ── */
+  --bg:       #0D1B2A;
+  --bg-2:     #1B2B45;
+  --text:     #FFFFFF;
+  --text-2:   #A7ADBA;
+  --text-3:   #415466;
+  --border:   rgba(255,255,255,0.08);
+  --surf:     rgba(255,255,255,0.04);
   --acc:      #E63B2E;
-  --font-display: var(--font-nunito), sans-serif;
+  --font-display: var(--font-cormorant), serif;
   --font-body:    var(--font-dm-sans), sans-serif;
 }
 
-/* Full-screen locked dashboard — scroll happens inside inner containers */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:     #F6F4F0;
+    --bg-2:   #FFFFFF;
+    --text:   #0D1B2A;
+    --text-2: #415466;
+    --text-3: #A7ADBA;
+    --border: #D4D2CE;
+    --surf:   #FFFFFF;
+    --acc:    #E63B2E;
+  }
+}
+
+/* Transición suave al cambiar modo del sistema */
+*, *::before, *::after {
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.2s ease;
+}
+
 body {
   background: var(--bg);
   font-family: var(--font-body);
