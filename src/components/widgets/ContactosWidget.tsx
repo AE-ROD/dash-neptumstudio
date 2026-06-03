@@ -29,15 +29,16 @@ export function ContactosWidget() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="bg-white rounded-2xl p-5 shadow-sm"
+      className="rounded-2xl p-5 shadow-sm"
+      style={{ background: 'var(--bg-2)', border: '1px solid var(--border)' }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <span className="font-black text-[14px] text-[#111] tracking-tight" style={{ fontFamily: 'var(--font-nunito)' }}>
+          <span className="font-black text-[14px] tracking-tight" style={{ color: 'var(--text)', fontFamily: 'var(--font-nunito)' }}>
             Contactos
           </span>
-          <span className="ml-2 text-[11px] text-[#bbb]">{contactos.length}</span>
+          <span className="ml-2 text-[11px]" style={{ color: 'var(--text-2)' }}>{contactos.length}</span>
         </div>
         <button
           onClick={() => setCreando(v => !v)}
@@ -56,37 +57,37 @@ export function ContactosWidget() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden mb-4"
           >
-            <div className="p-4 bg-[#FAFAF9] rounded-xl border border-[#EAEAE8] flex flex-col gap-2">
+            <div className="p-4 rounded-xl flex flex-col gap-2" style={{ background: 'var(--surf)', border: '1px solid var(--border)' }}>
               <div className="grid grid-cols-2 gap-2">
                 <input
                   value={nombre}
                   onChange={e => setNombre(e.target.value)}
                   placeholder="Nombre *"
-                  className="bg-white border border-[#EAEAE8] rounded-lg px-3 py-2 text-[12px] text-[#111] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
-                  style={{ fontFamily: 'var(--font-dm-sans)' }}
+                  className="rounded-lg px-3 py-2 text-[12px] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
+                  style={{ background: 'var(--bg-2)', border: '1px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}
                 />
                 <input
                   value={marca}
                   onChange={e => setMarca(e.target.value)}
                   placeholder="Marca / Empresa"
-                  className="bg-white border border-[#EAEAE8] rounded-lg px-3 py-2 text-[12px] text-[#111] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
-                  style={{ fontFamily: 'var(--font-dm-sans)' }}
+                  className="rounded-lg px-3 py-2 text-[12px] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
+                  style={{ background: 'var(--bg-2)', border: '1px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}
                 />
                 <input
                   value={correo}
                   onChange={e => setCorreo(e.target.value)}
                   placeholder="Correo"
                   type="email"
-                  className="bg-white border border-[#EAEAE8] rounded-lg px-3 py-2 text-[12px] text-[#111] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
-                  style={{ fontFamily: 'var(--font-dm-sans)' }}
+                  className="rounded-lg px-3 py-2 text-[12px] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
+                  style={{ background: 'var(--bg-2)', border: '1px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}
                 />
                 <input
                   value={celular}
                   onChange={e => setCelular(e.target.value)}
                   placeholder="Celular"
                   type="tel"
-                  className="bg-white border border-[#EAEAE8] rounded-lg px-3 py-2 text-[12px] text-[#111] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
-                  style={{ fontFamily: 'var(--font-dm-sans)' }}
+                  className="rounded-lg px-3 py-2 text-[12px] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
+                  style={{ background: 'var(--bg-2)', border: '1px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}
                 />
               </div>
               <button
@@ -104,11 +105,11 @@ export function ContactosWidget() {
 
       {/* Lista */}
       {cargando ? (
-        <p className="text-center text-[#ccc] text-[11px] py-8">Cargando...</p>
+        <p className="text-center text-[11px] py-8" style={{ color: 'var(--text-2)' }}>Cargando...</p>
       ) : contactos.length === 0 ? (
         <div className="text-center py-10">
-          <p className="text-[#ccc] text-[12px]" style={{ fontFamily: 'var(--font-dm-sans)' }}>Sin contactos todavía</p>
-          <p className="text-[#ddd] text-[11px] mt-1">Agrega el primero con el botón de arriba</p>
+          <p className="text-[12px]" style={{ color: 'var(--text-2)', fontFamily: 'var(--font-dm-sans)' }}>Sin contactos todavía</p>
+          <p className="text-[11px] mt-1" style={{ color: 'var(--text-3)' }}>Agrega el primero con el botón de arriba</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-0">
@@ -118,30 +119,31 @@ export function ContactosWidget() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: i * 0.05 }}
-              className="flex items-center gap-3 py-3 border-b border-[#F5F5F3] last:border-0"
+              className="flex items-center gap-3 py-3 border-b last:border-0"
+              style={{ borderColor: 'var(--border)' }}
             >
               {/* Avatar inicial */}
-              <div className="w-8 h-8 rounded-full bg-[#F0F0EE] flex items-center justify-center flex-shrink-0">
-                <span className="font-black text-[12px] text-[#555]" style={{ fontFamily: 'var(--font-nunito)' }}>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--surf)' }}>
+                <span className="font-black text-[12px]" style={{ color: 'var(--text-3)', fontFamily: 'var(--font-nunito)' }}>
                   {c.nombre[0]?.toUpperCase()}
                 </span>
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="text-[12px] font-bold text-[#111] truncate">{c.nombre}</div>
+                <div className="text-[12px] font-bold truncate" style={{ color: 'var(--text)' }}>{c.nombre}</div>
                 {c.marca && (
-                  <div className="text-[10px] text-[#888] truncate">{c.marca}</div>
+                  <div className="text-[10px] truncate" style={{ color: 'var(--text-2)' }}>{c.marca}</div>
                 )}
               </div>
 
               <div className="flex flex-col items-end gap-0.5 text-right">
                 {c.email && (
-                  <a href={`mailto:${c.email}`} className="text-[10px] text-[#aaa] hover:text-[#111] transition-colors truncate max-w-[140px]">
+                  <a href={`mailto:${c.email}`} className="text-[10px] hover:opacity-70 transition-opacity truncate max-w-[140px]" style={{ color: 'var(--text-3)' }}>
                     {c.email}
                   </a>
                 )}
                 {c.telefono && (
-                  <a href={`tel:${c.telefono}`} className="text-[10px] text-[#aaa] hover:text-[#111] transition-colors">
+                  <a href={`tel:${c.telefono}`} className="text-[10px] hover:opacity-70 transition-opacity" style={{ color: 'var(--text-3)' }}>
                     {c.telefono}
                   </a>
                 )}

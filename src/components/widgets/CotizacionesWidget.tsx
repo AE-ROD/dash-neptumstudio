@@ -39,7 +39,8 @@ export function CotizacionesWidget() {
             key={stat.label}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl px-5 py-4 shadow-sm"
+            className="rounded-2xl px-5 py-4 shadow-sm"
+            style={{ background: 'var(--bg-2)', border: '1px solid var(--border)' }}
           >
             <div className="text-[10px] font-semibold text-[#A7ADBA] uppercase tracking-widest mb-1"
               style={{ fontFamily: 'var(--font-dm-sans)' }}>
@@ -58,7 +59,8 @@ export function CotizacionesWidget() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white rounded-2xl shadow-sm overflow-hidden"
+        className="rounded-2xl shadow-sm overflow-hidden"
+        style={{ background: 'var(--bg-2)', border: '1px solid var(--border)' }}
       >
         {/* Header de la tabla */}
         <div className="bg-[#0D1B2A] px-6 py-4 flex items-center justify-between">
@@ -95,7 +97,7 @@ export function CotizacionesWidget() {
 
         {/* Cabecera columnas */}
         {cotizaciones.length > 0 && (
-          <div className="grid grid-cols-[1fr_120px_100px_80px_44px] gap-0 px-6 py-2.5 border-b border-[#F0F2F5]">
+          <div className="grid grid-cols-[1fr_120px_100px_80px_44px] gap-0 px-6 py-2.5 border-b" style={{ borderColor: 'var(--border)' }}>
             {['Cliente', 'Servicios', 'Total', 'Estado', ''].map(h => (
               <span key={h} className="text-[9px] font-bold text-[#A7ADBA] uppercase tracking-widest"
                 style={{ fontFamily: 'var(--font-dm-sans)' }}>
@@ -140,25 +142,24 @@ export function CotizacionesWidget() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: i * 0.05 }}
                 whileHover={{ backgroundColor: '#FAFBFC' }}
-                className="w-full grid grid-cols-[1fr_120px_100px_80px_44px] gap-0 px-6 py-4 border-b border-[#F5F7FA] last:border-0 text-left transition-colors group"
+                className="w-full grid grid-cols-[1fr_120px_100px_80px_44px] gap-0 px-6 py-4 border-b last:border-0 text-left transition-colors group"
+                style={{ borderColor: 'var(--border)' }}
               >
                 <div>
-                  <div className="text-[13px] font-semibold text-[#0D1B2A] truncate"
-                    style={{ fontFamily: 'var(--font-cormorant)', fontSize: '15px' }}>
+                  <div className="text-[13px] font-semibold truncate" style={{ color: 'var(--text)', fontFamily: 'var(--font-cormorant)', fontSize: '15px' }}>
                     {c.nombreCliente}
                   </div>
-                  <div className="text-[10px] text-[#A7ADBA] mt-0.5" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                  <div className="text-[10px] mt-0.5" style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
                     {new Date(c.creadoEn).toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <span className="text-[11px] text-[#415466]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                  <span className="text-[11px]" style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
                     {c.items.length} {c.items.length === 1 ? 'servicio' : 'servicios'}
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <span className="font-semibold text-[14px] text-[#0D1B2A]"
-                    style={{ fontFamily: 'var(--font-cormorant)' }}>
+                  <span className="font-semibold text-[14px]" style={{ color: 'var(--text)', fontFamily: 'var(--font-cormorant)' }}>
                     ${c.total.toLocaleString('es-CL')}
                   </span>
                 </div>

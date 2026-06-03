@@ -38,8 +38,8 @@ export function ModalBase({ estaAbierto, children }: ModalBaseProps) {
             exit={{ scale: 0.97,    opacity: 0 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
             onClick={e => e.stopPropagation()}
-            style={{ willChange: 'transform, opacity' }}
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-[520px] max-h-[80vh] overflow-hidden flex flex-col"
+            style={{ willChange: 'transform, opacity', background: 'var(--bg-2)', border: '1px solid var(--border)' }}
+            className="rounded-2xl shadow-2xl w-full max-w-[520px] max-h-[80vh] overflow-hidden flex flex-col"
           >
             {children}
           </motion.div>

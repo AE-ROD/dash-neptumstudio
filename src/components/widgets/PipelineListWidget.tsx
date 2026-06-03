@@ -46,13 +46,14 @@ export function PipelineListWidget() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.4 }}
-      className="bg-white rounded-2xl p-5 shadow-sm flex flex-col"
+      className="rounded-2xl p-5 shadow-sm flex flex-col"
+      style={{ background: 'var(--bg-2)', border: '1px solid var(--border)' }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <span
-          className="font-black text-[13px] text-[#111] tracking-tight"
-          style={{ fontFamily: 'var(--font-nunito)' }}
+          className="font-black text-[13px] tracking-tight"
+          style={{ color: 'var(--text)', fontFamily: 'var(--font-nunito)' }}
         >
           Pipeline
         </span>
@@ -73,28 +74,28 @@ export function PipelineListWidget() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="flex flex-col gap-2 mb-3 p-3 bg-[#FAFAF9] rounded-xl border border-[#EAEAE8]">
+            <div className="flex flex-col gap-2 mb-3 p-3 rounded-xl border" style={{ background: 'var(--surf)', borderColor: 'var(--border)' }}>
               <input
                 value={nombre}
                 onChange={e => setNombre(e.target.value)}
                 placeholder="Nombre del cliente *"
-                className="bg-white border border-[#EAEAE8] rounded-lg px-3 py-2 text-[12px] text-[#111] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
-                style={{ fontFamily: 'var(--font-dm-sans)' }}
+                className="rounded-lg px-3 py-2 text-[12px] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
+                style={{ background: 'var(--bg-2)', border: '1px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}
               />
               <input
                 value={descripcion}
                 onChange={e => setDescripcion(e.target.value)}
                 placeholder="Descripción del proyecto"
-                className="bg-white border border-[#EAEAE8] rounded-lg px-3 py-2 text-[12px] text-[#111] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
-                style={{ fontFamily: 'var(--font-dm-sans)' }}
+                className="rounded-lg px-3 py-2 text-[12px] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
+                style={{ background: 'var(--bg-2)', border: '1px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}
               />
               <div className="flex gap-2">
                 <input
                   value={monto}
                   onChange={e => setMonto(e.target.value.replace(/\D/g, ''))}
                   placeholder="Monto estimado"
-                  className="flex-1 bg-white border border-[#EAEAE8] rounded-lg px-3 py-2 text-[12px] text-[#111] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
-                  style={{ fontFamily: 'var(--font-dm-sans)' }}
+                  className="flex-1 rounded-lg px-3 py-2 text-[12px] placeholder-[#ccc] outline-none focus:border-[#111] transition-colors"
+                  style={{ background: 'var(--bg-2)', border: '1px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}
                 />
                 <button
                   onClick={crearPropuesta}
@@ -113,9 +114,9 @@ export function PipelineListWidget() {
       {/* Lista */}
       <div className="flex flex-col">
         {cargando ? (
-          <span className="text-[#bbb] text-xs py-4 text-center">Cargando...</span>
+          <span className="text-xs py-4 text-center" style={{ color: 'var(--text-2)' }}>Cargando...</span>
         ) : propuestas.length === 0 ? (
-          <span className="text-[#ccc] text-[11px] py-4 text-center" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+          <span className="text-[11px] py-4 text-center" style={{ color: 'var(--text-2)', fontFamily: 'var(--font-dm-sans)' }}>
             Sin leads activos — agrega el primero
           </span>
         ) : (
@@ -127,11 +128,12 @@ export function PipelineListWidget() {
               animate={{ opacity: 1 }}
               transition={{ delay: indice * 0.08 }}
               whileHover={{ x: 2 }}
-              className="flex items-center justify-between py-2.5 border-b border-[#F5F5F3] last:border-0 text-left w-full group"
+              className="flex items-center justify-between py-2.5 border-b last:border-0 text-left w-full group"
+              style={{ borderColor: 'var(--border)' }}
             >
               <div className="flex-1 min-w-0">
-                <div className="text-[12px] font-bold text-[#111] truncate">{propuesta.nombreCliente}</div>
-                <div className="text-[10px] text-[#bbb] mt-0.5 truncate">
+                <div className="text-[12px] font-bold truncate" style={{ color: 'var(--text)' }}>{propuesta.nombreCliente}</div>
+                <div className="text-[10px] mt-0.5 truncate" style={{ color: 'var(--text-2)' }}>
                   {propuesta.descripcion ?? 'Sin descripción'}
                   {propuesta.monto ? ` · $${propuesta.monto.toLocaleString('es-CL')}` : ''}
                 </div>
