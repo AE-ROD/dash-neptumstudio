@@ -33,5 +33,23 @@ export function useProyectos() {
     await cargar()
   }
 
-  return { proyectos, cargando, error, actualizarProyecto, recargar: cargar }
+  async function crearProyecto(datos: {
+    nombre: string
+    descripcion?: string
+    stack?: string[]
+    estado?: string
+    progreso?: number
+    repoUrl?: string
+    proximoPaso?: string
+  }) {
+    const res = await fetch('/api/projects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ progreso: 0, estado: 'ACTIVO', stack: [], ...datos }),
+    })
+    if (!res.ok) throw new Error('Error al crear proyecto')
+    await cargar()
+  }
+
+  return { proyectos, cargando, error, actualizarProyecto, crearProyecto, recargar: cargar }
 }
