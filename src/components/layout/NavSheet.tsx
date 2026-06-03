@@ -36,8 +36,12 @@ export function NavSheet({ open, onClose, colores, seccionActiva, onSelect }: Pr
             onClick={onClose}
           />
           <motion.div
-            className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl p-4 pb-10"
-            style={{ background: 'var(--bg-2)', borderTop: '1px solid var(--border)' }}
+            className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl p-4"
+            style={{
+              background: 'var(--bg-2)',
+              borderTop: '1px solid var(--border)',
+              paddingBottom: 'max(2.5rem, env(safe-area-inset-bottom, 2.5rem))',
+            }}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}

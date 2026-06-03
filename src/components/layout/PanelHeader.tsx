@@ -24,10 +24,7 @@ const PILLS_NAV: { id: SeccionActiva; etiqueta: string; tieneActividad: boolean 
 
 export function PanelHeader() {
   const [horaActual,  setHoraActual]  = useState(new Date().getHours())
-  const [esDark,      setEsDark]      = useState<boolean>(() => {
-    if (typeof window === 'undefined') return true
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-  })
+  const [esDark,      setEsDark]      = useState<boolean>(true)
   const [navOpen, setNavOpen] = useState(false)
   const { seccionActiva, cambiarSeccion, abrirDrawer } = usePanelContext()
 
@@ -137,7 +134,7 @@ export function PanelHeader() {
               </span>
             </div>
             <div style={{ background: '#E63B2E' }} className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-              <span style={{ fontFamily: 'var(--font-nunito)' }} className="font-black text-[13px] text-white">A</span>
+              <span className="font-black text-[13px] text-white" style={{ fontFamily: 'var(--font-display)' }}>A</span>
             </div>
           </div>
         </div>
