@@ -13,12 +13,13 @@ export function PendientesWidget() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.48 }}
-      className="bg-white rounded-2xl p-5 shadow-sm"
+      className="rounded-2xl p-5 shadow-sm"
+      style={{ background: 'var(--bg-2)', border: '1px solid var(--border)' }}
     >
       <div className="flex items-center justify-between mb-3">
         <span
-          className="font-black text-[13px] text-[#111] tracking-tight"
-          style={{ fontFamily: 'var(--font-nunito)' }}
+          className="font-black text-[13px] tracking-tight"
+          style={{ color: 'var(--text)', fontFamily: 'var(--font-nunito)' }}
         >
           Pendientes
         </span>
@@ -33,7 +34,7 @@ export function PendientesWidget() {
       <div className="flex flex-col">
         <AnimatePresence>
           {cargando
-            ? <span className="text-[#bbb] text-xs py-4 text-center">Cargando...</span>
+            ? <span className="text-xs py-4 text-center" style={{ color: 'var(--text-2)' }}>Cargando...</span>
             : visibles.map((pendiente) => (
               <motion.div
                 key={pendiente.id}
@@ -41,8 +42,8 @@ export function PendientesWidget() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                style={{ overflow: 'hidden' }}
-                className="flex items-start gap-2.5 py-1.5 border-b border-[#F5F5F3] last:border-0"
+                style={{ overflow: 'hidden', borderColor: 'var(--border)' }}
+                className="flex items-start gap-2.5 py-1.5 border-b last:border-0"
               >
                 <button
                   onClick={() => toggleCompletado(pendiente.id, !pendiente.completado)}
@@ -50,8 +51,8 @@ export function PendientesWidget() {
                     w-4 h-4 rounded border mt-0.5 flex-shrink-0 flex items-center justify-center
                     transition-colors duration-150
                     ${pendiente.completado
-                      ? 'bg-[#111] border-[#111]'
-                      : 'border-[#ccc] bg-white'
+                      ? 'border-[#111]'
+                      : 'border-[#ccc]'
                     }
                   `}
                 >
@@ -65,9 +66,10 @@ export function PendientesWidget() {
                     </motion.span>
                   )}
                 </button>
-                <span className={`text-[12px] leading-snug transition-all duration-200 ${
-                  pendiente.completado ? 'line-through text-[#ccc]' : 'text-[#111]'
-                }`}>
+                <span
+                  className="text-[12px] leading-snug transition-all duration-200"
+                  style={{ color: pendiente.completado ? 'var(--text-2)' : 'var(--text)', textDecoration: pendiente.completado ? 'line-through' : 'none' }}
+                >
                   {pendiente.texto}
                 </span>
               </motion.div>

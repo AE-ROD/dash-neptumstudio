@@ -23,17 +23,18 @@ export function IdeasWidget() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.72 }}
-      className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-3 min-h-0"
+      className="rounded-2xl p-5 shadow-sm flex flex-col gap-3 min-h-0"
+      style={{ background: 'var(--bg-2)', border: '1px solid var(--border)' }}
     >
       <div className="flex items-center justify-between">
         <button
           onClick={() => abrirModal('idea')}
-          className="font-black text-[15px] text-[#111] tracking-tight hover:text-[#E63B2E] transition-colors text-left"
-          style={{ fontFamily: 'var(--font-nunito)' }}
+          className="font-black text-[15px] tracking-tight hover:text-[#E63B2E] transition-colors text-left"
+          style={{ color: 'var(--text)', fontFamily: 'var(--font-nunito)' }}
         >
           Capturado
         </button>
-        <span className="text-[12px] text-[#bbb] font-bold tabular-nums">
+        <span className="text-[12px] font-bold tabular-nums" style={{ color: 'var(--text-2)' }}>
           {ideas.length}
         </span>
       </div>
@@ -41,9 +42,9 @@ export function IdeasWidget() {
       <div className="flex flex-col gap-0 overflow-hidden">
         <AnimatePresence initial={false}>
           {cargando ? (
-            <span className="text-[#bbb] text-[13px] py-2">Cargando...</span>
+            <span className="text-[13px] py-2" style={{ color: 'var(--text-2)' }}>Cargando...</span>
           ) : ideas.length === 0 ? (
-            <span className="text-[#bbb] text-[13px] py-2">Nada capturado aún</span>
+            <span className="text-[13px] py-2" style={{ color: 'var(--text-2)' }}>Nada capturado aún</span>
           ) : (
             ideas.slice(0, 10).map((idea) => {
               const chip = CHIP_COLORES[idea.etiqueta] ?? CHIP_COLORES.IDEA
@@ -53,8 +54,8 @@ export function IdeasWidget() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  style={{ overflow: 'hidden' }}
-                  className="flex items-start gap-2 py-2 border-b border-[#F5F5F3] last:border-0"
+                  style={{ overflow: 'hidden', borderColor: 'var(--border)' }}
+                  className="flex items-start gap-2 py-2 border-b last:border-0"
                 >
                   <span
                     style={{ background: chip.bg, color: chip.text }}
@@ -62,7 +63,7 @@ export function IdeasWidget() {
                   >
                     {EMOJI_ETIQUETA[idea.etiqueta]} {idea.etiqueta}
                   </span>
-                  <span className="text-[13px] text-[#333] leading-snug line-clamp-2">
+                  <span className="text-[13px] leading-snug line-clamp-2" style={{ color: 'var(--text)' }}>
                     {idea.texto}
                   </span>
                 </motion.div>
