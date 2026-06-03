@@ -84,13 +84,14 @@ export function SueltaloWidget() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.64 }}
-      className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-3"
+      className="rounded-2xl p-5 shadow-sm flex flex-col gap-3"
+      style={{ background: 'var(--bg-2)', border: '1px solid var(--border)' }}
     >
       {/* Header */}
       <div className="flex items-center justify-between">
         <span
-          className="font-black text-[13px] text-[#111] tracking-tight"
-          style={{ fontFamily: 'var(--font-nunito)' }}
+          className="font-black text-[13px] tracking-tight"
+          style={{ color: 'var(--text)', fontFamily: 'var(--font-nunito)' }}
         >
           Suéltalo
         </span>
@@ -130,8 +131,8 @@ export function SueltaloWidget() {
         onChange={e => setTexto(e.target.value)}
         onKeyDown={e => e.key === 'Enter' && e.metaKey && guardar()}
         placeholder="Una idea, tarea, cliente nuevo..."
-        className="bg-[#FAFAF9] border border-[#EAEAE8] rounded-lg px-3 py-2.5 text-[12px] text-[#111] placeholder-[#ccc] resize-none outline-none focus:border-[#111] transition-colors"
-        style={{ fontFamily: 'var(--font-dm-sans)', minHeight: texto ? '72px' : '48px' }}
+        className="rounded-lg px-3 py-2.5 text-[12px] placeholder-[#ccc] resize-none outline-none focus:border-[#111] transition-colors"
+        style={{ background: 'var(--surf)', border: '1px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-dm-sans)', minHeight: texto ? '72px' : '48px' }}
       />
 
       {/* Chips */}

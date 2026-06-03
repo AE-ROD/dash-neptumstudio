@@ -37,24 +37,25 @@ export function CalendarioWidget() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.52 }}
-      className="bg-white rounded-2xl p-5 shadow-sm flex flex-col h-full"
+      className="rounded-2xl p-5 shadow-sm flex flex-col h-full"
+      style={{ background: 'var(--bg-2)', border: '1px solid var(--border)' }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div>
-          <div className="font-bold text-[11px] text-[#A7ADBA] uppercase tracking-widest"
-            style={{ fontFamily: 'var(--font-dm-sans)' }}>
+          <div className="font-bold text-[11px] uppercase tracking-widest"
+            style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
             Agenda
           </div>
-          <div className="text-[13px] font-medium text-[#0D1B2A] mt-0.5"
-            style={{ fontFamily: 'var(--font-dm-sans)' }}>
+          <div className="text-[13px] font-medium mt-0.5"
+            style={{ color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}>
             {DIAS_ES[hoy.getDay()]}, {hoy.getDate()} de {MESES_ES[hoy.getMonth()]}
           </div>
         </div>
         <button
           onClick={() => abrirDrawer('calendario')}
-          className="text-[11px] font-bold text-[#0D1B2A] hover:opacity-50 transition-opacity"
-          style={{ fontFamily: 'var(--font-dm-sans)' }}
+          className="text-[11px] font-bold hover:opacity-50 transition-opacity"
+          style={{ color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}
         >
           Ver todo →
         </button>
@@ -74,17 +75,17 @@ export function CalendarioWidget() {
       {/* Lista próximos eventos */}
       <div className="flex flex-col gap-2 flex-1">
         {cargando ? (
-          <div className="text-[11px] text-[#A7ADBA] text-center py-4"
-            style={{ fontFamily: 'var(--font-dm-sans)' }}>
+          <div className="text-[11px] text-center py-4"
+            style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
             Cargando…
           </div>
         ) : proximosEventos.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-1 py-2 opacity-40">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D1B2A" strokeWidth="1.5" strokeLinecap="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" style={{ color: 'var(--text-3)' }}>
               <rect x="3" y="4" width="18" height="18" rx="2"/>
               <path d="M16 2v4M8 2v4M3 10h18"/>
             </svg>
-            <span className="text-[10px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+            <span className="text-[10px]" style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
               Sin eventos próximos
             </span>
           </div>
@@ -101,8 +102,8 @@ export function CalendarioWidget() {
                 <div className="flex-shrink-0 w-0.5 self-stretch rounded-full mt-0.5"
                   style={{ background: TIPO_COLOR[ev.tipo] }} />
                 <div className="flex-1 min-w-0">
-                  <div className="text-[12px] font-medium text-[#0D1B2A] truncate group-hover:opacity-60 transition-opacity"
-                    style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                  <div className="text-[12px] font-medium truncate group-hover:opacity-60 transition-opacity"
+                    style={{ color: 'var(--text)', fontFamily: 'var(--font-dm-sans)' }}>
                     {ev.titulo}
                   </div>
                   <div className="flex items-center gap-1.5 mt-0.5">
@@ -110,7 +111,7 @@ export function CalendarioWidget() {
                       style={{ color: TIPO_COLOR[ev.tipo], fontFamily: 'var(--font-dm-sans)' }}>
                       {TIPO_LABEL[ev.tipo]}
                     </span>
-                    <span className="text-[9px] text-[#A7ADBA]" style={{ fontFamily: 'var(--font-dm-sans)' }}>
+                    <span className="text-[9px]" style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
                       {esHoy ? `Hoy${ev.hora ? ` · ${ev.hora}` : ''}` : `${fecha.getDate()} ${MESES_ES[fecha.getMonth()]}${ev.hora ? ` · ${ev.hora}` : ''}`}
                     </span>
                   </div>
@@ -124,8 +125,8 @@ export function CalendarioWidget() {
       {/* Footer add */}
       <button
         onClick={() => abrirDrawer('calendario')}
-        className="mt-3 pt-3 border-t border-[#F5F7FA] text-[10px] font-semibold text-[#A7ADBA] hover:text-[#0D1B2A] transition-colors text-left"
-        style={{ fontFamily: 'var(--font-dm-sans)' }}
+        className="mt-3 pt-3 border-t text-[10px] font-semibold hover:opacity-70 transition-opacity text-left"
+        style={{ borderColor: 'var(--border)', color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}
       >
         + Agregar evento
       </button>

@@ -24,7 +24,6 @@ import { BalancePageWidget }          from '@/components/widgets/BalancePageWidg
 import { InstagramPageWidget }        from '@/components/widgets/InstagramPageWidget'
 // Overlays
 import { ProyectoDrawer }             from '@/components/drawers/ProyectoDrawer'
-import { PendientesDrawer }           from '@/components/drawers/PendientesDrawer'
 import { CalendarioDrawer }           from '@/components/drawers/CalendarioDrawer'
 import { PropuestaModal }             from '@/components/modals/PropuestaModal'
 import { IdeaModal }                  from '@/components/modals/IdeaModal'
@@ -57,38 +56,46 @@ const fade = {
   transition: { duration: 0.22 },
 }
 
+const stagger = {
+  animate: { transition: { staggerChildren: 0.06 } },
+}
+const itemFade = {
+  initial:  { opacity: 0, y: 10 },
+  animate:  { opacity: 1, y: 0, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+}
+
 export default function PaginaPanel() {
   const { seccionActiva } = usePanelContext()
   const filas = FILAS_POR_SECCION[seccionActiva]
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#EFEFED]">
+    <div className="flex flex-col h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
       <PanelHeader />
 
-      <main id="panel-main" className="flex-1 overflow-y-auto px-9 py-5 flex flex-col gap-3">
+      <main id="panel-main" className="flex-1 overflow-y-auto px-3 py-3 md:px-6 md:py-4 lg:px-9 lg:py-5 flex flex-col gap-3">
         <AnimatePresence mode="popLayout" initial={false}>
 
           {/* ── INICIO: Ideas fijadas arriba-derecha, resto apilado a la izquierda ── */}
           {filas.includes('inicio') && (
             <motion.div key="inicio" {...fade}
-              className="grid grid-cols-[1fr_260px] gap-3 items-start">
+              className="flex flex-col xl:grid xl:grid-cols-[1fr_260px] gap-3 items-start">
 
               {/* Columna principal */}
               <div className="flex flex-col gap-3">
                 {/* Stats */}
-                <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr] gap-3">
-                  <IngresosHeroWidget />
-                  <PipelineStatWidget />
-                  <ProyectosStatWidget />
-                  <InstagramStatWidget />
-                </div>
+                <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-3" variants={stagger} initial="initial" animate="animate">
+                  <motion.div variants={itemFade}><IngresosHeroWidget /></motion.div>
+                  <motion.div variants={itemFade}><PipelineStatWidget /></motion.div>
+                  <motion.div variants={itemFade}><ProyectosStatWidget /></motion.div>
+                  <motion.div variants={itemFade}><InstagramStatWidget /></motion.div>
+                </motion.div>
                 {/* Listas */}
-                <div className="grid grid-cols-[2fr_1fr] gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-3">
                   <ProyectosListWidget />
                   <PipelineListWidget />
                 </div>
                 {/* Día — sin IdeasWidget (está en sidebar) */}
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <PendientesWidget />
                   <CalendarioWidget />
                   <SueltaloWidget />
@@ -133,7 +140,6 @@ export default function PaginaPanel() {
 
       {/* Overlays */}
       <ProyectoDrawer />
-      <PendientesDrawer />
       <CalendarioDrawer />
       <PropuestaModal />
       <IdeaModal />
