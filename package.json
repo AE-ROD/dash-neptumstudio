@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && cp src/app/generated/*.node src/app/ 2>/dev/null; next build",
     "start": "next start",
     "postinstall": "prisma generate"
   },
