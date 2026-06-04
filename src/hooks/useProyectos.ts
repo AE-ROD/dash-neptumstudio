@@ -12,8 +12,8 @@ export function useProyectos() {
       setCargando(true)
       const res = await fetch('/api/projects')
       if (!res.ok) throw new Error('Error al cargar proyectos')
-      const datos: Proyecto[] = await res.json()
-      setProyectos(datos)
+      const datos = await res.json()
+      setProyectos(Array.isArray(datos) ? datos : [])
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error desconocido')
     } finally {

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Añadir dark/light mode automático, header con gradientes por horario en ambos modos, tridente SVG como logo, NavSheet mobile y layout responsive al dashboard dash-neptumstudio.
+**Goal:** Añadir dark/light mode automático, header con gradientes por horario en ambos modos, tridente SVG como logo, NavSheet mobile y layout responsive al dashboard neptum-dash.
 
 **Architecture:** Los tokens de color se definen en `globals.css` con `prefers-color-scheme`. `PanelHeader` detecta el modo con `matchMedia` y elige entre `GRADIENTES_DARK`/`GRADIENTES_HEADER` según horario. Los widgets migran sus colores hardcodeados a variables CSS. El layout de `page.tsx` pasa a ser responsive con un `NavSheet` de Framer Motion para mobile.
 

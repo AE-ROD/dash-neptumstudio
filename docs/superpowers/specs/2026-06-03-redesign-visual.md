@@ -1,6 +1,6 @@
 # Rediseño Visual Dashboard — Design Spec
 **Date:** 2026-06-03
-**Project:** dash-neptumstudio
+**Project:** neptum-dash
 **Branch:** feat/mejora-modal → nueva rama `feat/redesign-visual`
 **Status:** Approved
 

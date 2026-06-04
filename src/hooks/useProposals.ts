@@ -9,7 +9,7 @@ export function useProposals() {
   const cargar = useCallback(async () => {
     setCargando(true)
     const res = await fetch('/api/proposals')
-    if (res.ok) setPropuestas(await res.json())
+    if (res.ok) { const d = await res.json(); setPropuestas(Array.isArray(d) ? d : []) }
     setCargando(false)
   }, [])
 

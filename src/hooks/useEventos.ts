@@ -11,7 +11,7 @@ export function useEventos() {
     try {
       const res = await fetch('/api/eventos')
       const data = await res.json()
-      setEventos(data)
+      setEventos(Array.isArray(data) ? data : [])
     } finally { setCargando(false) }
   }, [])
 

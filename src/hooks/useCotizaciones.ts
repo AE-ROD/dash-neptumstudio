@@ -9,7 +9,7 @@ export function useCotizaciones() {
   const cargar = useCallback(async () => {
     setCargando(true)
     const res = await fetch('/api/cotizaciones')
-    if (res.ok) setCotizaciones(await res.json())
+    if (res.ok) { const d = await res.json(); setCotizaciones(Array.isArray(d) ? d : []) }
     setCargando(false)
   }, [])
 

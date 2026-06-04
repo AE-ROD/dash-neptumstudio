@@ -9,7 +9,7 @@ export function useIdeas() {
   const cargar = useCallback(async () => {
     try {
       const res = await fetch('/api/ideas')
-      if (res.ok) setIdeas(await res.json())
+      if (res.ok) { const d = await res.json(); setIdeas(Array.isArray(d) ? d : []) }
     } catch {
       // silencioso
     } finally {

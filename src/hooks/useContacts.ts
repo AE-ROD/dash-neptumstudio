@@ -9,7 +9,7 @@ export function useContacts() {
   const cargar = useCallback(async () => {
     setCargando(true)
     const res = await fetch('/api/contacts')
-    if (res.ok) setContactos(await res.json())
+    if (res.ok) { const d = await res.json(); setContactos(Array.isArray(d) ? d : []) }
     setCargando(false)
   }, [])
 

@@ -657,4 +657,4 @@ Abrir `http://localhost:3000` y verificar:
 git push -u origin feat/mejora-modal
 ```
 
-Resultado esperado: rama publicada en `https://github.com/AE-ROD/dash-neptumstudio`.
+Resultado esperado: rama publicada en `https://github.com/AE-ROD/neptum-dash`.

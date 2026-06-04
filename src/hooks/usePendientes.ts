@@ -9,7 +9,7 @@ export function usePendientes() {
   const cargar = useCallback(async () => {
     setCargando(true)
     const res = await fetch('/api/pending')
-    if (res.ok) setPendientes(await res.json())
+    if (res.ok) { const d = await res.json(); setPendientes(Array.isArray(d) ? d : []) }
     setCargando(false)
   }, [])
 

@@ -23,18 +23,20 @@ const PILLS_NAV: { id: SeccionActiva; etiqueta: string; tieneActividad: boolean 
 ]
 
 export function PanelHeader() {
-  const [horaActual,  setHoraActual]  = useState(new Date().getHours())
+  const [horaActual,  setHoraActual]  = useState(12) // valor neutro para SSR
   const [esDark,      setEsDark]      = useState<boolean>(true)
   const [navOpen, setNavOpen] = useState(false)
   const { seccionActiva, cambiarSeccion, abrirDrawer } = usePanelContext()
 
   useEffect(() => {
+    setHoraActual(new Date().getHours())
     const intervalo = setInterval(() => setHoraActual(new Date().getHours()), 60_000)
     return () => clearInterval(intervalo)
   }, [])
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    setEsDark(mq.matches)
     const handler = (e: MediaQueryListEvent) => setEsDark(e.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
