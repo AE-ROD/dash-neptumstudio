@@ -1,7 +1,7 @@
 // TODO: Agregar autenticación NextAuth antes de producción
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
+import { Prisma } from '@/app/generated/prisma/client'
 
 export async function PATCH(
   req: Request,
