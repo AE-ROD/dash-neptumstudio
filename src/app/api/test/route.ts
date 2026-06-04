@@ -1,0 +1,13 @@
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  try {
+    const { prisma } = await import('@/lib/prisma')
+    await prisma.$queryRaw`SELECT 1`
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    return NextResponse.json({
+      error: error instanceof Error ? error.message : String(error),
+    }, { status: 500 })
+  }
+}
