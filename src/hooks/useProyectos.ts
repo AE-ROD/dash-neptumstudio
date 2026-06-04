@@ -38,6 +38,7 @@ export function useProyectos() {
     descripcion?: string
     stack?: string[]
     estado?: string
+    area?: string | null
     progreso?: number
     repoUrl?: string
     proximoPaso?: string

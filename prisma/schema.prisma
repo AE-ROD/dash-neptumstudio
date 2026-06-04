@@ -16,6 +16,7 @@ model Project {
   descripcion   String?
   stack         String[]
   estado        ProjectEstado @default(ACTIVO)
+  area          ProjectArea?
   progreso      Int           @default(0)
   repoUrl       String?
   rutaLocal     String?
@@ -143,6 +144,12 @@ enum ProjectEstado {
   PAUSADO
   COMPLETADO
   ARCHIVADO
+}
+
+enum ProjectArea {
+  SALUD
+  OFICIO
+  RESTO
 }
 
 enum ProposalEstado {

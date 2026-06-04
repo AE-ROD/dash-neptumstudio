@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loader Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Montserrat', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; padding: 2rem; }
+h1 { font-family: 'Cormorant Garamond', serif; font-size: 1.75rem; font-weight: 300; text-align: center; margin-bottom: 0.3rem; }
+.sub { text-align: center; font-size: 0.6875rem; color: #555; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 2rem; }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+
+.card { border-radius: 12px; overflow: hidden; border: 2px solid transparent; cursor: pointer; transition: border-color 0.2s, transform 0.15s; }
+.card:hover { transform: translateY(-3px); }
+.card.selected { border-color: #E63B2E; }
+
+.card-label { background: #141414; padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+.card-letter { width: 26px; height: 26px; border-radius: 50%; background: #E63B2E; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+.card-title { font-size: 0.8125rem; font-weight: 600; margin-left: 0.75rem; }
+.card-tag { font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: #E63B2E; font-weight: 700; border: 1px solid #E63B2E; padding: 0.1rem 0.35rem; border-radius: 3px; white-space: nowrap; }
+
+/* Preview container */
+.preview {
+  background: #06090d;
+  height: 260px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+
+/* ── LOADER A: Cortina idéntica al sitio ── */
+.loader-a-screen {
+  position: absolute; inset: 0;
+  background: #141517;
+  display: flex; align-items: center; justify-content: center;
+  animation: slide-up-a 0.8s 2.8s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes slide-up-a { to { transform: translateY(-100%); } }
+
+.loader-a-words {
+  text-align: center;
+  animation: fade-in-words 0.5s 0.3s ease forwards;
+  opacity: 0;
+}
+@keyframes fade-in-words { to { opacity: 1; } }
+
+.loader-a-word {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem; font-weight: 300;
+  color: #fff;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  white-space: nowrap;
+}
+.w1 { animation: word-flash 0.3s 0.5s forwards; }
+.w2 { animation: word-flash 0.3s 0.9s forwards; }
+.w3 { animation: word-flash 0.3s 1.3s forwards; }
+.w4 { animation: word-flash 0.3s 1.7s forwards; }
+.w5 { animation: word-flash 0.3s 2.1s forwards; }
+@keyframes word-flash {
+  0% { opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; }
+}
+
+.loader-a-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 8vh;
+  background: #141517;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  animation: slide-up-a 0.8s 2.8s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+/* Dashboard peek (shows after loader) */
+.dash-peek {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+}
+.peek-header {
+  height: 44px;
+  background: linear-gradient(120deg, #1a0f00, #2d1a00);
+  display: flex; align-items: center; padding: 0 1rem; gap: 0.5rem;
+}
+.peek-header svg { width: 14px; height: 14px; color: #FDE68A; }
+.peek-header span { font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; color: #FDE68A; }
+.peek-body { flex: 1; background: #0D1B2A; padding: 0.75rem; display: grid; grid-template-columns: repeat(3,1fr); gap: 0.4rem; }
+.peek-widget { background: #1B2B45; border-radius: 6px; padding: 0.5rem; }
+.peek-val { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #fff; }
+.peek-lbl { font-size: 0.35rem; color: #415466; text-transform: uppercase; letter-spacing: 0.12em; }
+
+/* ── LOADER B: Tridente construyéndose ── */
+.loader-b-bg {
+  position: absolute; inset: 0;
+  background: #0D1B2A;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
+  animation: fade-out-b 0.5s 2.5s ease forwards;
+}
+@keyframes fade-out-b { to { opacity: 0; pointer-events: none; } }
+
+.trident-build { position: relative; width: 48px; height: 56px; }
+.trident-build svg { width: 100%; height: 100%; color: #A7ADBA; }
+.trident-line-1 { stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw-line 0.4s 0.2s ease forwards; }
+.trident-line-2 { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw-line 0.35s 0.5s ease forwards; }
+.trident-line-3 { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw-line 0.35s 0.75s ease forwards; }
+.trident-wave { stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw-line 0.4s 1.1s ease forwards; }
+@keyframes draw-line { to { stroke-dashoffset: 0; } }
+
+.loader-b-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 300; letter-spacing: 0.1em;
+  color: #A7ADBA; opacity: 0;
+  animation: fade-in-b-text 0.4s 1.4s ease forwards;
+}
+@keyframes fade-in-b-text { to { opacity: 1; } }
+.loader-b-sub {
+  font-size: 0.45rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: #415466; opacity: 0;
+  animation: fade-in-b-text 0.4s 1.7s ease forwards;
+}
+
+/* ── LOADER C: Sin loader — fade suave del dashboard ── */
+.loader-c {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  animation: fade-in-dash 0.6s 0.2s ease both;
+  opacity: 0;
+}
+@keyframes fade-in-dash { to { opacity: 1; } }
+.loader-c-header {
+  height: 44px;
+  background: linear-gradient(120deg, #1a0f00, #2d1a00);
+  display: flex; align-items: center; padding: 0 1rem; gap: 0.5rem;
+}
+.loader-c-header svg { width: 14px; height: 14px; color: #FDE68A; }
+.loader-c-header span { font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; color: #FDE68A; }
+.loader-c-body { flex: 1; background: #0D1B2A; padding: 0.75rem; display: grid; grid-template-columns: repeat(3,1fr); gap: 0.4rem; align-content: start; }
+.lc-widget { background: #1B2B45; border-radius: 6px; padding: 0.5rem; }
+.lc-widget:nth-child(1) { animation: widget-in 0.3s 0.3s both; opacity: 0; }
+.lc-widget:nth-child(2) { animation: widget-in 0.3s 0.45s both; opacity: 0; }
+.lc-widget:nth-child(3) { animation: widget-in 0.3s 0.6s both; opacity: 0; }
+.lc-widget:nth-child(4) { animation: widget-in 0.3s 0.75s both; opacity: 0; grid-column: span 2; }
+.lc-widget:nth-child(5) { animation: widget-in 0.3s 0.9s both; opacity: 0; }
+@keyframes widget-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.lc-val { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: #fff; }
+.lc-lbl { font-size: 0.35rem; color: #415466; text-transform: uppercase; letter-spacing: 0.12em; }
+
+/* Desc */
+.desc { background: #141414; padding: 0.875rem 1.25rem; border-top: 1px solid #1e1e1e; }
+.desc h4 { font-size: 0.6875rem; font-weight: 700; margin-bottom: 0.3rem; }
+.desc p { font-size: 0.5625rem; color: #666; line-height: 1.65; }
+.restart { margin-top: 0.5rem; font-size: 0.5rem; color: #E63B2E; cursor: pointer; }
+.restart:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<h1>Loader del Dashboard</h1>
+<p class="sub">¿Cómo debe sentirse la primera carga? — Haz click en cada preview para reiniciar la animación</p>
+
+<div class="grid">
+
+  <!-- ── A: Cortina idéntica al sitio ── -->
+  <div class="card" data-choice="a" onclick="elegir(this)">
+    <div class="card-label">
+      <div style="display:flex;align-items:center">
+        <div class="card-letter">A</div>
+        <div class="card-title">Cortina igual al sitio</div>
+      </div>
+      <div class="card-tag">⭐ Coherente</div>
+    </div>
+    <div class="preview" id="prev-a" onclick="reiniciar('a', event)">
+      <div class="dash-peek">
+        <div class="peek-header">
+          <svg viewBox="0 0 60 68" fill="none"><line x1="30" y1="4" x2="30" y2="52" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><polyline points="25,14 30,4 35,14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 56 Q19 50 30 56 Q41 62 52 56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+          <span>neptumstudio · panel</span>
+        </div>
+        <div class="peek-body">
+          <div class="peek-widget"><div class="peek-lbl">Ingresos</div><div class="peek-val">$4.2M</div></div>
+          <div class="peek-widget"><div class="peek-lbl">Pipeline</div><div class="peek-val">8</div></div>
+          <div class="peek-widget"><div class="peek-lbl">Proyectos</div><div class="peek-val">5</div></div>
+        </div>
+      </div>
+      <div class="loader-a-screen" id="la-screen">
+        <div class="loader-a-words">
+          <div class="loader-a-word w1">Buenos días</div>
+          <div class="loader-a-word w2">Cargando</div>
+          <div class="loader-a-word w3">panel</div>
+          <div class="loader-a-word w4">Neptune</div>
+          <div class="loader-a-word w5">...</div>
+        </div>
+      </div>
+    </div>
+    <div class="desc">
+      <h4>Cortina que sube con saludos — igual al sitio</h4>
+      <p>Palabras rotando (Buenos días / panel / Neptune...) y la pantalla negra sube revelando el dashboard. Experiencia idéntica a neptumstudio.com. Usa Framer Motion en vez de GSAP.</p>
+      <div class="restart" onclick="reiniciar('a', event)">↺ Reiniciar animación</div>
+    </div>
+  </div>
+
+  <!-- ── B: Tridente dibujándose ── -->
+  <div class="card" data-choice="b" onclick="elegir(this)">
+    <div class="card-label">
+      <div style="display:flex;align-items:center">
+        <div class="card-letter" style="background:#1B2B45">B</div>
+        <div class="card-title">Tridente dibujándose</div>
+      </div>
+      <div class="card-tag" style="color:#A7ADBA;border-color:#A7ADBA">Premium</div>
+    </div>
+    <div class="preview" id="prev-b" onclick="reiniciar('b', event)">
+      <div class="dash-peek" style="opacity:0;animation:fade-in-dash 0.5s 2.7s ease forwards">
+        <div class="peek-header"><svg viewBox="0 0 60 68" fill="none"><line x1="30" y1="4" x2="30" y2="52" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M8 56 Q19 50 30 56 Q41 62 52 56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg><span style="color:#FDE68A;font-family:'Cormorant Garamond',serif;font-size:0.75rem">neptumstudio · panel</span></div>
+        <div class="peek-body"><div class="peek-widget"><div class="peek-lbl">Ingresos</div><div class="peek-val">$4.2M</div></div><div class="peek-widget"><div class="peek-lbl">Pipeline</div><div class="peek-val">8</div></div><div class="peek-widget"><div class="peek-lbl">Proyectos</div><div class="peek-val">5</div></div></div>
+      </div>
+      <div class="loader-b-bg" id="lb-bg">
+        <div class="trident-build">
+          <svg viewBox="0 0 60 68" fill="none">
+            <line class="trident-line-1" x1="30" y1="4" x2="30" y2="52" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <polyline class="trident-line-2" points="25,14 30,4 35,14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line class="trident-line-3" x1="12" y1="20" x2="12" y2="48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <polyline class="trident-line-3" points="8,28 12,20 16,28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line class="trident-line-3" x1="48" y1="20" x2="48" y2="48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <polyline class="trident-line-3" points="44,28 48,20 52,28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="trident-wave" d="M8 56 Q19 50 30 56 Q41 62 52 56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="loader-b-text">neptumstudio</div>
+        <div class="loader-b-sub">panel de control</div>
+      </div>
+    </div>
+    <div class="desc">
+      <h4>El tridente se dibuja stroke a stroke</h4>
+      <p>Sobre fondo navy, el SVG del tridente aparece línea a línea con stroke-dashoffset. Luego el nombre aparece y el loader hace fade-out revelando el dashboard. Animación premium y única.</p>
+      <div class="restart" onclick="reiniciar('b', event)">↺ Reiniciar animación</div>
+    </div>
+  </div>
+
+  <!-- ── C: Sin loader pesado, entrada escalonada ── -->
+  <div class="card" data-choice="c" onclick="elegir(this)">
+    <div class="card-label">
+      <div style="display:flex;align-items:center">
+        <div class="card-letter" style="background:#415466">C</div>
+        <div class="card-title">Sin loader — widgets entran escalonados</div>
+      </div>
+      <div class="card-tag" style="color:#888;border-color:#444">Rápido</div>
+    </div>
+    <div class="preview" id="prev-c" onclick="reiniciar('c', event)">
+      <div class="loader-c" id="lc-wrap">
+        <div class="loader-c-header">
+          <svg viewBox="0 0 60 68" fill="none"><line x1="30" y1="4" x2="30" y2="52" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M8 56 Q19 50 30 56 Q41 62 52 56" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+          <span style="color:#FDE68A;font-family:'Cormorant Garamond',serif;font-size:0.75rem">neptumstudio · panel</span>
+        </div>
+        <div class="loader-c-body">
+          <div class="lc-widget"><div class="lc-lbl">Ingresos</div><div class="lc-val">$4.2M</div></div>
+          <div class="lc-widget"><div class="lc-lbl">Pipeline</div><div class="lc-val">8</div></div>
+          <div class="lc-widget"><div class="lc-lbl">Proyectos</div><div class="lc-val">5</div></div>
+          <div class="lc-widget"><div class="lc-lbl">Tendencia semanal</div><div class="lc-val" style="font-size:0.75rem">↑ 18%</div></div>
+          <div class="lc-widget"><div class="lc-lbl">IG</div><div class="lc-val">312</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="desc">
+      <h4>Sin pantalla de espera — widgets aparecen uno a uno</h4>
+      <p>El dashboard se muestra directamente con una entrada escalonada por widget (stagger). Sin bloquear la UI. Ideal para uso diario donde ya conoces el panel y no quieres esperar un loader.</p>
+      <div class="restart" onclick="reiniciar('c', event)">↺ Reiniciar animación</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function elegir(el) {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  if (window.notifySelection) window.notifySelection(el.dataset.choice, el.querySelector('.card-title').textContent);
+}
+
+function reiniciar(id, e) {
+  e.stopPropagation();
+  const prev = document.getElementById('prev-' + id);
+  // Clone to restart animations
+  const clone = prev.cloneNode(true);
+  prev.parentNode.replaceChild(clone, prev);
+  clone.id = 'prev-' + id;
+  clone.addEventListener('click', (ev) => reiniciar(id, ev));
+  // Re-attach restart buttons
+  clone.parentNode.querySelector('.restart').addEventListener('click', (ev) => reiniciar(id, ev));
+}
+</script>
+</body>
+</html>

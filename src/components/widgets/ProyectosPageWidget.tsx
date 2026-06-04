@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useProyectos } from '@/hooks/useProyectos'
 import { usePanelContext } from '@/context/PanelContext'
 import { BarraProgreso } from '@/components/ui/BarraProgreso'
-import type { ProjectEstado } from '@/types/panel'
+import type { ProjectEstado, ProjectArea } from '@/types/panel'
 
 const BADGE: Record<ProjectEstado, { bg: string; text: string; label: string; dot: string }> = {
   ACTIVO:     { bg: '#EDFCF2', text: '#1A7F4B', label: 'Activo',     dot: '#1A7F4B' },
@@ -14,6 +14,13 @@ const BADGE: Record<ProjectEstado, { bg: string; text: string; label: string; do
 }
 
 const ESTADOS: ProjectEstado[] = ['ACTIVO', 'PAUSADO', 'COMPLETADO', 'ARCHIVADO']
+
+const AREAS: { value: ProjectArea | ''; label: string; color: string; accent: string }[] = [
+  { value: '',       label: 'Sin área',    color: 'var(--surf)',    accent: 'var(--text-3)' },
+  { value: 'SALUD',  label: '🏥 Salud',    color: '#EDFCF2',       accent: '#1A7F4B'       },
+  { value: 'OFICIO', label: '🔧 Oficio',   color: '#EEF2FF',       accent: '#3B5BDB'       },
+  { value: 'RESTO',  label: '🍽 Gastronomía', color: '#FFF8EC',    accent: '#D97706'       },
+]
 
 const inputStyle: React.CSSProperties = {
   background: 'var(--surf)',
@@ -38,6 +45,7 @@ export function ProyectosPageWidget() {
     descripcion: '',
     stack:       '',       // comma-separated → se convierte a array al enviar
     estado:      'ACTIVO' as ProjectEstado,
+    area:        '' as ProjectArea | '',
     repoUrl:     '',
     proximoPaso: '',
   })
@@ -63,10 +71,11 @@ export function ProyectosPageWidget() {
         descripcion: form.descripcion.trim() || undefined,
         stack:       form.stack.split(',').map(s => s.trim()).filter(Boolean),
         estado:      form.estado,
+        area:        form.area || null,
         repoUrl:     form.repoUrl.trim() || undefined,
         proximoPaso: form.proximoPaso.trim() || undefined,
       })
-      setForm({ nombre: '', descripcion: '', stack: '', estado: 'ACTIVO', repoUrl: '', proximoPaso: '' })
+      setForm({ nombre: '', descripcion: '', stack: '', estado: 'ACTIVO', area: '', repoUrl: '', proximoPaso: '' })
       setFormAbierto(false)
     } finally {
       setGuardando(false)
@@ -155,21 +164,52 @@ export function ProyectosPageWidget() {
                   Nuevo proyecto
                 </p>
 
-                {/* Nombre + Estado */}
-                <div className="grid grid-cols-1 md:grid-cols-[1fr_160px] gap-3">
-                  <div className="flex flex-col gap-1">
+                {/* Nombre */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-semibold uppercase tracking-widest"
+                    style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
+                    Nombre *
+                  </label>
+                  <input
+                    value={form.nombre}
+                    onChange={e => cambiar('nombre', e.target.value)}
+                    placeholder="Mi nuevo proyecto"
+                    required
+                    style={inputStyle}
+                  />
+                </div>
+
+                {/* Área + Estado */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {/* Selector de área — botones visuales */}
+                  <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-semibold uppercase tracking-widest"
                       style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
-                      Nombre *
+                      Área del sector
                     </label>
-                    <input
-                      value={form.nombre}
-                      onChange={e => cambiar('nombre', e.target.value)}
-                      placeholder="Mi nuevo proyecto"
-                      required
-                      style={inputStyle}
-                    />
+                    <div className="grid grid-cols-4 gap-1.5">
+                      {AREAS.map(a => {
+                        const activa = form.area === a.value
+                        return (
+                          <button
+                            key={a.value}
+                            type="button"
+                            onClick={() => cambiar('area', a.value)}
+                            className="py-2 px-1 rounded-lg text-[10px] font-semibold transition-all text-center"
+                            style={{
+                              background:  activa ? a.color : 'var(--surf)',
+                              color:       activa ? a.accent : 'var(--text-3)',
+                              border:      activa ? `1.5px solid ${a.accent}` : '1px solid var(--border)',
+                              fontFamily:  'var(--font-dm-sans)',
+                            }}
+                          >
+                            {a.label}
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
+
                   <div className="flex flex-col gap-1">
                     <label className="text-[10px] font-semibold uppercase tracking-widest"
                       style={{ color: 'var(--text-3)', fontFamily: 'var(--font-dm-sans)' }}>
@@ -308,9 +348,20 @@ export function ProyectosPageWidget() {
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               <div>
-                <div className="text-[15px] font-semibold"
-                  style={{ color: 'var(--text)', fontFamily: 'var(--font-cormorant)' }}>
-                  {p.nombre}
+                <div className="flex items-center gap-2">
+                  <div className="text-[15px] font-semibold"
+                    style={{ color: 'var(--text)', fontFamily: 'var(--font-cormorant)' }}>
+                    {p.nombre}
+                  </div>
+                  {p.area && (() => {
+                    const a = AREAS.find(x => x.value === p.area)
+                    return a ? (
+                      <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                        style={{ background: a.color, color: a.accent, fontFamily: 'var(--font-dm-sans)', border: `1px solid ${a.accent}40` }}>
+                        {a.label}
+                      </span>
+                    ) : null
+                  })()}
                 </div>
                 {p.descripcion && (
                   <div className="text-[10px] mt-0.5 truncate max-w-xs"

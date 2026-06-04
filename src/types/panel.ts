@@ -1,6 +1,6 @@
-export type { ProjectEstado, ProposalEstado, IdeaEtiqueta, ClientTipo, IdeaEstado, CotizacionEstado } from '@/app/generated/prisma/client'
+export type { ProjectEstado, ProjectArea, ProposalEstado, IdeaEtiqueta, ClientTipo, IdeaEstado, CotizacionEstado } from '@/app/generated/prisma/client'
 
-import type { ProjectEstado, ProposalEstado, IdeaEtiqueta, IdeaEstado, CotizacionEstado } from '@/app/generated/prisma/client'
+import type { ProjectEstado, ProjectArea, ProposalEstado, IdeaEtiqueta, IdeaEstado, CotizacionEstado } from '@/app/generated/prisma/client'
 
 export interface Proyecto {
   id: string
@@ -8,6 +8,7 @@ export interface Proyecto {
   descripcion: string | null
   stack: string[]
   estado: ProjectEstado
+  area: ProjectArea | null
   progreso: number
   repoUrl: string | null
   ultimaNota: string | null
