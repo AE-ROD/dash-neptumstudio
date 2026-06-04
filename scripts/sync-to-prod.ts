@@ -4,7 +4,7 @@
  */
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
-import { PrismaClient } from '../src/app/generated/prisma/client'
+import { PrismaClient } from '../src/app/generated/client'
 
 function parseEnvFile(path: string): Record<string, string> {
   try {

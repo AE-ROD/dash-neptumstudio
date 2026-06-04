@@ -4,7 +4,7 @@ import { config } from 'dotenv'
 import { resolve } from 'path'
 config({ path: resolve(process.cwd(), '.env.local') })
 
-import { PrismaClient } from '../src/app/generated/prisma/client'
+import { PrismaClient } from '../src/app/generated/client'
 
 const prisma = new PrismaClient()
 
