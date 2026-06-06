@@ -11,12 +11,34 @@ export function ProyectoDrawer() {
   const { proyectos, actualizarProyecto } = useProyectos()
   const [nuevaNota, setNuevaNota] = useState('')
   const [guardando, setGuardando] = useState(false)
+  const [editandoProgreso, setEditandoProgreso] = useState(false)
+  const [progresoInput, setProgresoInput] = useState('')
 
   const proyecto = proyectos.find(p => p.id === idSeleccionado)
   const estaAbierto = drawerAbierto === 'proyecto'
 
   // Limpiar nota al cambiar de proyecto
-  useEffect(() => { setNuevaNota('') }, [idSeleccionado])
+  useEffect(() => { setNuevaNota(''); setEditandoProgreso(false) }, [idSeleccionado])
+
+  function iniciarEdicionProgreso() {
+    if (!proyecto) return
+    setProgresoInput(String(proyecto.progreso))
+    setEditandoProgreso(true)
+  }
+
+  async function guardarProgreso() {
+    if (!proyecto) return
+    const valor = Math.min(100, Math.max(0, parseInt(progresoInput) || 0))
+    setEditandoProgreso(false)
+    if (valor !== proyecto.progreso) {
+      await actualizarProyecto(proyecto.id, { progreso: valor })
+    }
+  }
+
+  function onKeyDownProgreso(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') guardarProgreso()
+    if (e.key === 'Escape') setEditandoProgreso(false)
+  }
 
   async function guardarNota() {
     if (!proyecto || !nuevaNota.trim()) return
@@ -57,12 +79,34 @@ export function ProyectoDrawer() {
 
           {/* Progreso */}
           <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-[11px]">
+            <div className="flex justify-between items-center text-[11px]">
               <span className="font-bold text-[#555] uppercase tracking-widest">Progreso</span>
-              <span className="font-black text-[#111]"
-                style={{ fontFamily: 'var(--font-nunito)' }}>
-                {proyecto.progreso}%
-              </span>
+              {editandoProgreso ? (
+                <div className="flex items-center gap-1">
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    value={progresoInput}
+                    onChange={e => setProgresoInput(e.target.value)}
+                    onBlur={guardarProgreso}
+                    onKeyDown={onKeyDownProgreso}
+                    autoFocus
+                    className="w-14 text-right bg-[#FAFAF9] border border-[#111] rounded px-1.5 py-0.5 text-[12px] font-black text-[#111] outline-none"
+                    style={{ fontFamily: 'var(--font-nunito)' }}
+                  />
+                  <span className="font-black text-[#111]" style={{ fontFamily: 'var(--font-nunito)' }}>%</span>
+                </div>
+              ) : (
+                <button
+                  onClick={iniciarEdicionProgreso}
+                  className="font-black text-[#111] hover:text-[#E63B2E] transition-colors cursor-pointer"
+                  style={{ fontFamily: 'var(--font-nunito)' }}
+                  title="Editar progreso"
+                >
+                  {proyecto.progreso}%
+                </button>
+              )}
             </div>
             <BarraProgreso porcentaje={proyecto.progreso} altura="h-1.5" />
           </div>
