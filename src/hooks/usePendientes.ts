@@ -41,5 +41,12 @@ export function usePendientes() {
     await cargar()
   }
 
-  return { pendientes, cargando, toggleCompletado, agregarPendiente, recargar: cargar }
+  async function eliminarPendiente(id: string) {
+    setPendientes(prev => prev.filter(p => p.id !== id))
+    try {
+      await fetch(`/api/pending/${id}`, { method: 'DELETE' })
+    } catch { cargar() }
+  }
+
+  return { pendientes, cargando, toggleCompletado, agregarPendiente, eliminarPendiente, recargar: cargar }
 }

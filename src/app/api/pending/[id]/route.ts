@@ -26,3 +26,20 @@ export async function PATCH(
     return NextResponse.json({ error: 'Error al actualizar pendiente' }, { status: 500 })
   }
 }
+
+export async function DELETE(
+  _req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    await prisma.pending.delete({ where: { id } })
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      return NextResponse.json({ error: 'No encontrado' }, { status: 404 })
+    }
+    console.error('[api/pending DELETE]', error)
+    return NextResponse.json({ error: 'Error al eliminar pendiente' }, { status: 500 })
+  }
+}
