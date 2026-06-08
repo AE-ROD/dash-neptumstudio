@@ -93,7 +93,7 @@ export function PendientesWidget() {
                 {/* Basura */}
                 <button
                   onClick={() => eliminarPendiente(pendiente.id)}
-                  className="flex-shrink-0 text-[#ccc] hover:text-[#E63B2E] transition-colors opacity-0 group-hover:opacity-100"
+                  className="flex-shrink-0 text-[#ddd] hover:text-[#E63B2E] active:text-[#E63B2E] transition-colors"
                   aria-label="Eliminar"
                 >
                   <IconoBasura />

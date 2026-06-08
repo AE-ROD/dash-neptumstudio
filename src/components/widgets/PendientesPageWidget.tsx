@@ -19,7 +19,7 @@ const EMOJI_ETIQUETA: Record<Categoria, string> = {
 }
 
 function CapturadoPanel() {
-  const { ideas, cargando } = useIdeas()
+  const { ideas, cargando, completarIdea, descompletarIdea, eliminarIdea } = useIdeas()
 
   const porCategoria = CATEGORIAS.reduce<Record<Categoria, typeof ideas>>(
     (acc, cat) => {
@@ -32,15 +32,10 @@ function CapturadoPanel() {
   return (
     <div className="bg-white rounded-2xl shadow-sm p-5 sticky top-0 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <span
-          className="font-black text-[15px] text-[#111] tracking-tight"
-          style={{ fontFamily: 'var(--font-nunito)' }}
-        >
+        <span className="font-black text-[15px] text-[#111] tracking-tight" style={{ fontFamily: 'var(--font-nunito)' }}>
           Capturado
         </span>
-        <span className="text-[12px] text-[#bbb] font-bold tabular-nums">
-          {ideas.length}
-        </span>
+        <span className="text-[12px] text-[#bbb] font-bold tabular-nums">{ideas.length}</span>
       </div>
 
       {cargando ? (
@@ -56,24 +51,52 @@ function CapturadoPanel() {
             return (
               <div key={cat} className="flex flex-col gap-1.5">
                 <div className="flex items-center gap-1.5">
-                  <span
-                    style={{ background: chip.bg, color: chip.text }}
-                    className="text-[10px] font-extrabold px-2 py-0.5 rounded-full"
-                  >
+                  <span style={{ background: chip.bg, color: chip.text }} className="text-[10px] font-extrabold px-2 py-0.5 rounded-full">
                     {EMOJI_ETIQUETA[cat]} {cat}
                   </span>
                   <span className="text-[10px] text-[#bbb] font-bold">{items.length}</span>
                 </div>
-                <div className="flex flex-col">
-                  {items.map(idea => (
-                    <div
-                      key={idea.id}
-                      className="py-1.5 border-b border-[#F5F5F3] last:border-0"
-                    >
-                      <p className="text-[12px] text-[#333] leading-snug">{idea.texto}</p>
-                    </div>
-                  ))}
-                </div>
+                <AnimatePresence initial={false}>
+                  {items.map(idea => {
+                    const completada = idea.estado === 'COMPLETADA'
+                    return (
+                      <motion.div
+                        key={idea.id}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.18 }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <div className="flex items-center gap-2 py-1.5 border-b border-[#F5F5F3] last:border-0">
+                          {/* Checkbox */}
+                          <button
+                            onClick={() => completada ? descompletarIdea(idea.id) : completarIdea(idea.id)}
+                            className="flex-shrink-0 w-4 h-4 rounded border flex items-center justify-center transition-all duration-150"
+                            style={{ borderColor: completada ? '#1A7F4B' : '#D0D5DD', background: completada ? '#1A7F4B' : 'transparent' }}
+                          >
+                            {completada && (
+                              <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }}
+                                xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24"
+                                fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                              </motion.svg>
+                            )}
+                          </button>
+                          {/* Texto */}
+                          <p className="flex-1 text-[12px] text-[#333] leading-snug min-w-0 transition-all duration-200"
+                            style={{ color: completada ? '#A7ADBA' : '#333', textDecoration: completada ? 'line-through' : 'none' }}>
+                            {idea.texto}
+                          </p>
+                          {/* Basura — siempre visible en mobile */}
+                          <button onClick={() => eliminarIdea(idea.id)} className="flex-shrink-0 text-[#ddd] hover:text-[#E63B2E] active:text-[#E63B2E] transition-colors" aria-label="Eliminar">
+                            <IconoBasura />
+                          </button>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
+                </AnimatePresence>
               </div>
             )
           })}
@@ -273,7 +296,7 @@ export function PendientesPageWidget() {
                   )}
                   <button
                     onClick={() => eliminarPendiente(p.id)}
-                    className="text-[#ccc] hover:text-[#E63B2E] transition-colors opacity-0 group-hover:opacity-100 flex-shrink-0"
+                    className="text-[#ddd] hover:text-[#E63B2E] active:text-[#E63B2E] transition-colors flex-shrink-0"
                     aria-label="Eliminar"
                   >
                     <IconoBasura />
